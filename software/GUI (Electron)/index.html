@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TactJam UI</title>
+
+    <link rel="stylesheet" href="compiled-css/style.css">
+
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+
+<body>
+
+<div id="main-container">
+
+<div class="half-panel">
+<!--    <h2>Time profile</h2>-->
+
+    <svg id="time-profile"></svg>
+</div>
+
+<div class="half-panel">
+<!--    <h2>Body placement</h2>-->
+
+    <div id="body-placement">
+        <canvas id="silhouette-static"></canvas>
+        <canvas id="silhouette-interactive"></canvas>
+    </div>
+</div>
+
+</div>
+
+<script type="text/javascript" src="tp_plots.js"></script>
+<script type="text/javascript" src="silhouette.js"></script>
+<script src="node_modules/vtp.js/dist/vtp.js"></script>
+<script type="text/javascript">
+
+    console.log(VTP.decodeInstruction(0x2AACCD6B));
+
+</script>
+
+</body>
+
+</html>

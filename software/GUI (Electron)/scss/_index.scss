@@ -1,0 +1,73 @@
+#main-container {
+  display: flex;
+  background: radial-gradient(circle at center, $white, change-color($white, $alpha: 0.75) 100%);
+  /* TODO fix dimensions */
+  height: 692px;
+  overflow: hidden;
+
+  .half-panel {
+    position: relative;
+    width: 50%;
+    box-sizing: border-box;
+  }
+
+  h2 {
+    margin: $padding-sides;
+    font-size: 24px;
+    line-height: 38px;
+  }
+
+  svg, canvas {
+    width:100%;
+    //height: $canvas-height;
+    //background: #dedede;
+    //border: 1px solid #bbbbbb;
+  }
+
+  /* TODO not hardcoded */
+  #time-profile {
+    height:690px;
+
+    .default-line {
+      //stroke: change-color($black, $alpha: 0.3);
+      stroke-width: 1px;
+    }
+
+    .plot-label, .duration {
+      font: inherit;
+      font-size: 16px;
+      text-anchor: end;
+    }
+  }
+
+  #body-placement {
+    position: relative;
+    margin-top: 150px;
+    //height: $canvas-height;
+
+    canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+}
+
+
+//line {
+//  stroke-width: 2px;
+//}
+
+#canvases {
+  position: relative
+}
+
+#canvases canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#interaction-canvas {
+  z-index: 1;
+}

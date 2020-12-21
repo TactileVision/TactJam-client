@@ -1,0 +1,23 @@
+{
+  "name": "tactjam-ui",
+  "version": "1.0.0",
+  "description": "UI for the TactJam prototype",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^11.0.3",
+    "electron-tabs": "^0.15.0",
+    "fs": "0.0.1-security",
+    "sass": "^1.29.0",
+    "serialport": "^9.0.2",
+    "vtp.js": "^0.3.0"
+  },
+  "devDependencies": {
+    "electron-rebuild": "^2.3.2"
+  }
+}

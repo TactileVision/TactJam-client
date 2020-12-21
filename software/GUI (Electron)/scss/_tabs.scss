@@ -1,0 +1,82 @@
+/* change default style of tabs module */
+
+.etabs-tabgroup {
+  width: 100%;
+  height: 60px;
+  //background-color: #ccc;
+  //cursor: default;
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  line-height: 60px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+//.etabs-tabgroup.visible {
+//  display: block;
+//}
+
+.etabs-tabs {
+  display: flex;
+  flex-direction: row;
+}
+
+.etabs-tab {
+  width: 33.33%;
+  display: none;
+  position: relative;
+  color: change-color($white, $alpha: 0.75);
+  height: 60px;
+  //padding: 6px 8px 4px;
+  box-sizing: border-box;
+  border: 1px solid change-color($white, $alpha: 0.75);
+  border-bottom: none;
+  border-left: none;
+  //background: linear-gradient(to bottom, rgba(234,234,234,1) 0%,rgba(204,204,204,1) 100%);
+  background: $black;
+  cursor: pointer;
+  text-align: center;
+
+
+  &.visible {
+    display: inline-block;
+    float: left;
+  }
+  
+  &.active {
+    color: $black;
+    background: $white;
+    border-color: $black;
+    border-bottom: none;
+    cursor: default;
+
+    .icons-buttons {
+      display: inline-block;
+    }
+  }
+
+  
+  .icons-buttons {
+    display: none;
+    position: absolute;
+    right: 0;
+    font-size: 24px;
+    margin-right: 15px;
+    cursor: pointer;
+    user-select: none;
+
+    i {
+      margin-right: 10px;
+    }
+  }
+}
+
+.etabs-views {
+  position: relative;
+  border-top: 1px solid #aaa;
+  height: calc(100vh - 33px);
+}
+
+.etab-view {
+  position: relative;
+}
