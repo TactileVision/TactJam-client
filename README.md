@@ -8,20 +8,20 @@ Currently, the application is not fully functional, only some major graphical fe
 
 - [login page](https://github.com/derikon/TactJam/blob/develop/software/GUI%20(Electron)/login.html) (entry point): simply asks the user to connect with a username and password
 
-![login screenshot](https://github.com/derikon/TactJam/blob/develop/software/GUI%20(Electron)/screenshots/tactjam_login.jpg)
+![login screenshot](https://github.com/TactileVision/TactJam-client/blob/main/software/screenshots/tactjam_login.jpg)
 
 
 - [tabs view](https://github.com/derikon/TactJam/blob/develop/software/GUI%20(Electron)/tabs.html) (three tabs in total), that include each a visual representation of a tacton (i.e., time profile and body placement of the actuators. This view also contains the connection panel (bottom left) that display the connection status with the device, and enables uploading tactons on it.
 
 
-![tabs view](https://github.com/derikon/TactJam/blob/develop/software/GUI%20(Electron)/screenshots/tactjam_tabs.jpg)
+![tabs view](https://github.com/TactileVision/TactJam-client/blob/main/software/screenshots/tactjam_tabs.jpg)
 
 
 
 - [save view](https://github.com/derikon/TactJam/blob/develop/software/GUI%20(Electron)/save.html) that enables one to save meta data about (title, description, tags) a Tacton and upload it eventually on a server.
 
 
-![save view](https://github.com/derikon/TactJam/blob/develop/software/GUI%20(Electron)/screenshots/tactjam_save.jpg)
+![save view](https://github.com/TactileVision/TactJam-client/blob/main/software/screenshots/tactjam_save.jpg)
 
 
 
