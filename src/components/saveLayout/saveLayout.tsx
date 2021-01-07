@@ -31,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
     button: {
         margin: theme.spacing(1, 1, 0, 0),
     },
+    buttonContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
 }));
 
 const ITEM_HEIGHT = 48;
@@ -127,13 +131,15 @@ const SaveLayout = () => {
                                 ))}
                             </Select>
                         </FormControl>
-                        <Button type="submit" variant="outlined" color="primary" className={classes.button} style={{marginTop:'60px'}}>
-                            Submit
-        </Button>
+                        <div className={classes.buttonContainer}>
+                            <Button type="submit" variant="outlined" color="primary" className={classes.button} style={{ marginTop: '60px' }}>
+                                Submit
+                        </Button>
+                        </div>
                     </FormControl>
                 </form>
             </Grid>
-            <Grid item xs={2}/>
+            <Grid item xs={2} />
         </Grid>
     );
 }

@@ -7,21 +7,18 @@ import CloseOutlined from '@material-ui/icons/CloseOutlined';
 import { Layouts } from '../App'
 import { remote } from 'electron';
 
-interface buttonInterface {
-    onClickTab: any;
-    slotNumber: number;
-}
-
 const useStyles = makeStyles((theme: Theme) => ({
+    root: {
+        backgroundColor: '#002884'
+    },
     button: {
-        textTransform: 'none',
-        textAlign: 'center',
-        color: 'white',
-        minHeight: '100%',
+        maxHeight: '10px'
     },
 }));
 
 const ElectronNavbar = () => {
+    const classes = useStyles();
+
     const closeWindow = () => {
         console.log("onfire")
         let w = remote.getCurrentWindow()
@@ -29,12 +26,10 @@ const ElectronNavbar = () => {
     }
 
     return (
-        <Grid container spacing={0} >
-            <Grid item xs={12}>
-                <IconButton aria-label="close" onClick={() => closeWindow()}>
-                    <CloseOutlined />
-                </IconButton>
-            </Grid>
+        <Grid container justify="flex-end" className={classes.root}>
+            <IconButton aria-label="close" color="primary" onClick={() => closeWindow()} className={classes.button}>
+                <CloseOutlined />
+            </IconButton>
         </Grid>
     );
 };

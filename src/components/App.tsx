@@ -5,7 +5,7 @@ import MainLayout from './mainLayout/mainLayout'
 import ImportLayout from './importLayout/importLayout'
 import SaveLayout from './saveLayout/saveLayout';
 import CustomTab from './Navbar/CustomTab';
-import ConnectionLayout from './deviceConnection/connectionLayout';
+import LoginLayout from './loginLayout/loginLayout';
 import ElectronNavbar from './Navbar/electronNavbar';
 
 export enum Layouts {
@@ -19,10 +19,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexGrow: 1,
   },
   tabs: {
-    borderRightStyle: "solid",
-    borderLeftStyle: "solid",
-    borderBottomStyle: "solid",
-    borderBlockColor: 'black',
     backgroundColor: "#3f51b5",
     minHeight: 40,
     textAlign: 'center',
@@ -30,7 +26,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   middleTab: {
     borderRightStyle: "solid",
     borderLeftStyle: "solid",
-    borderBottomStyle: "solid",
     borderBlockColor: 'black',
     backgroundColor: "#3f51b5",
     minHeight: 40,
@@ -41,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function NavTabs() {
   const classes = useStyles();
-  const [devConnected, setDevConnected] = React.useState(false);
+  const [isConnected, setIsConnected] = React.useState(false);
   const [activeSlot, setActiveSlot] = React.useState(1);
   const [currentLayout, setCurrentLayout] = React.useState(Layouts.MainLayout);
 
@@ -51,10 +46,10 @@ export default function NavTabs() {
     setCurrentLayout(layout)
   };
 
-  const tryReconnectDev = () => {
-    setDevConnected(true)
+  const tryLogin = () => {
+    setIsConnected(true)
   }
-  return devConnected ? (
+  return isConnected ? (
     <Grid container spacing={0} className={classes.root}>
       <Grid item xs={12} >
         <ElectronNavbar />
@@ -86,7 +81,7 @@ export default function NavTabs() {
   ) : (
       <div>
         <ElectronNavbar />
-        <ConnectionLayout onClickRefresh={() => tryReconnectDev()} />
+        <LoginLayout onClickSubmit={() => tryLogin()} />
       </div>
     );
 }
