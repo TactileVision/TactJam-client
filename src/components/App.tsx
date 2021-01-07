@@ -19,23 +19,23 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexGrow: 1,
   },
   tabs: {
-    borderRightStyle: "solid",
-    borderLeftStyle: "solid",
-    borderBottomStyle: "solid",
-    borderBlockColor: 'black',
-    backgroundColor: "#3f51b5",
+    // borderRightStyle: "solid",
+    // borderLeftStyle: "solid",
+    // borderBottomStyle: "solid",
+    // borderBlockColor: 'black',
+    // backgroundColor: "#3f51b5",
     minHeight: 40,
     textAlign: 'center',
   },
   middleTab: {
-    borderRightStyle: "solid",
-    borderLeftStyle: "solid",
-    borderBottomStyle: "solid",
-    borderBlockColor: 'black',
-    backgroundColor: "#3f51b5",
+    // borderRightStyle: "solid",
+    // borderLeftStyle: "solid",
+    // borderBottomStyle: "solid",
+    // borderBlockColor: 'black',
+    // backgroundColor: "#3f51b5",
     minHeight: 40,
     textAlign: 'center',
-  }
+  },
 }));
 
 
@@ -64,18 +64,21 @@ export default function NavTabs() {
         <CustomTab
           onClickTab={(slotNumber: number, layout: Layouts) => handleChange(slotNumber, layout)}
           slotNumber={1}
+          selected={activeSlot === 1}
         />
       </Grid>
       <Grid item xs={4} className={classes.middleTab}>
         <CustomTab
           onClickTab={(slotNumber: number, layout: Layouts) => handleChange(slotNumber, layout)}
           slotNumber={2}
+          selected={activeSlot === 2}
         />
       </Grid>
       <Grid item xs={4} className={classes.tabs}>
         <CustomTab
           onClickTab={(slotNumber: number, layout: Layouts) => handleChange(slotNumber, layout)}
           slotNumber={3}
+          selected={activeSlot === 3}
         />
       </Grid>
       <Grid item xs={12}>
