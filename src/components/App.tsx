@@ -54,11 +54,12 @@ export default function NavTabs() {
   const tryReconnectDev = () => {
     setDevConnected(true)
   }
+  
   return devConnected ? (
     <Grid container spacing={0} className={classes.root}>
-      <Grid item xs={12} >
-        <ElectronNavbar />
-      </Grid>
+      {/*<Grid item xs={12} >*/}
+      {/*  <ElectronNavbar />*/}
+      {/*</Grid>*/}
       <Grid item xs={4} className={classes.tabs}>
         <CustomTab
           onClickTab={(slotNumber: number, layout: Layouts) => handleChange(slotNumber, layout)}
@@ -85,7 +86,7 @@ export default function NavTabs() {
     </Grid>
   ) : (
       <div>
-        <ElectronNavbar />
+        {/*<ElectronNavbar />*/}
         <ConnectionLayout onClickRefresh={() => tryReconnectDev()} />
       </div>
     );
