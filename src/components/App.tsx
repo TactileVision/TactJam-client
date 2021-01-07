@@ -5,8 +5,9 @@ import MainLayout from './mainLayout/mainLayout'
 import ImportLayout from './importLayout/importLayout'
 import SaveLayout from './saveLayout/saveLayout';
 import CustomTab from './Navbar/CustomTab';
-import ConnectionLayout from './deviceConnection/connectionLayout';
+import LoginLayout from './loginLayout/loginLayout';
 import ElectronNavbar from './Navbar/electronNavbar';
+import ConnectionLayout from './deviceConnection/connectionLayout'
 
 export enum Layouts {
   MainLayout,
