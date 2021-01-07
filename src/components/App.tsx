@@ -7,6 +7,7 @@ import SaveLayout from './saveLayout/saveLayout';
 import CustomTab from './Navbar/CustomTab';
 import LoginLayout from './loginLayout/loginLayout';
 import ElectronNavbar from './Navbar/electronNavbar';
+import ConnectionLayout from './deviceConnection/connectionLayout'
 
 export enum Layouts {
   MainLayout,
@@ -19,24 +20,29 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexGrow: 1,
   },
   tabs: {
-    backgroundColor: "#3f51b5",
+    // borderRightStyle: "solid",
+    // borderLeftStyle: "solid",
+    // borderBottomStyle: "solid",
+    // borderBlockColor: 'black',
+    // backgroundColor: "#3f51b5",
     minHeight: 40,
     textAlign: 'center',
   },
   middleTab: {
-    borderRightStyle: "solid",
-    borderLeftStyle: "solid",
-    borderBlockColor: 'black',
-    backgroundColor: "#3f51b5",
+    // borderRightStyle: "solid",
+    // borderLeftStyle: "solid",
+    // borderBottomStyle: "solid",
+    // borderBlockColor: 'black',
+    // backgroundColor: "#3f51b5",
     minHeight: 40,
     textAlign: 'center',
-  }
+  },
 }));
 
 
 export default function NavTabs() {
   const classes = useStyles();
-  const [isConnected, setIsConnected] = React.useState(false);
+  const [devConnected, setDevConnected] = React.useState(false);
   const [activeSlot, setActiveSlot] = React.useState(1);
   const [currentLayout, setCurrentLayout] = React.useState(Layouts.MainLayout);
 
@@ -46,30 +52,34 @@ export default function NavTabs() {
     setCurrentLayout(layout)
   };
 
-  const tryLogin = () => {
-    setIsConnected(true)
+  const tryReconnectDev = () => {
+    setDevConnected(true)
   }
-  return isConnected ? (
+  
+  return devConnected ? (
     <Grid container spacing={0} className={classes.root}>
-      <Grid item xs={12} >
-        <ElectronNavbar />
-      </Grid>
+      {/*<Grid item xs={12} >*/}
+      {/*  <ElectronNavbar />*/}
+      {/*</Grid>*/}
       <Grid item xs={4} className={classes.tabs}>
         <CustomTab
           onClickTab={(slotNumber: number, layout: Layouts) => handleChange(slotNumber, layout)}
           slotNumber={1}
+          selected={activeSlot === 1}
         />
       </Grid>
       <Grid item xs={4} className={classes.middleTab}>
         <CustomTab
           onClickTab={(slotNumber: number, layout: Layouts) => handleChange(slotNumber, layout)}
           slotNumber={2}
+          selected={activeSlot === 2}
         />
       </Grid>
       <Grid item xs={4} className={classes.tabs}>
         <CustomTab
           onClickTab={(slotNumber: number, layout: Layouts) => handleChange(slotNumber, layout)}
           slotNumber={3}
+          selected={activeSlot === 3}
         />
       </Grid>
       <Grid item xs={12}>
@@ -80,8 +90,8 @@ export default function NavTabs() {
     </Grid>
   ) : (
       <div>
-        <ElectronNavbar />
-        <LoginLayout onClickSubmit={() => tryLogin()} />
+        {/*<ElectronNavbar />*/}
+        <ConnectionLayout onClickRefresh={() => tryReconnectDev()} />
       </div>
     );
 }

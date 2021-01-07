@@ -8,7 +8,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 720,
-    frame:false,
+    // frame:false,
     webPreferences: {
         nodeIntegration: true, 
         enableRemoteModule: true
@@ -16,6 +16,7 @@ function createWindow() {
     resizable: false
   });
 
+  mainWindow.webContents.openDevTools();
   mainWindow.loadFile('index.html');
   mainWindow.on("closed", function () {
     mainWindow = null;
