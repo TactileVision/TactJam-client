@@ -5,9 +5,8 @@ import MainLayout from './mainLayout/mainLayout'
 import ImportLayout from './importLayout/importLayout'
 import SaveLayout from './saveLayout/saveLayout';
 import CustomTab from './Navbar/CustomTab';
-import LoginLayout from './loginLayout/loginLayout';
 import ElectronNavbar from './Navbar/electronNavbar';
-import ConnectionLayout from './deviceConnection/connectionLayout'
+import LoginLayout from './login/loginLayout';
 
 export enum Layouts {
   MainLayout,
@@ -91,7 +90,7 @@ export default function NavTabs() {
   ) : (
       <div>
         {/*<ElectronNavbar />*/}
-        <ConnectionLayout onClickRefresh={() => tryReconnectDev()} />
+        <LoginLayout onClickRefresh={() => tryReconnectDev()} />
       </div>
     );
 }

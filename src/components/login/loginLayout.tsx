@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const ConnectionLayout = ({ onClickRefresh }: connlayoutInterface) => {
+const LoginLayout = ({ onClickRefresh }: connlayoutInterface) => {
     const classes = useStyles();
     // return (
     //     <div className={classes.container}>
@@ -87,7 +87,7 @@ const ConnectionLayout = ({ onClickRefresh }: connlayoutInterface) => {
         //     </Grid>
         // </Grid>
         <Grid container direction="column" alignContent="center" className={classes.root}>
-            <Grid container direction="column" alignContent="center" alignItems="center" className={classes.fullH} spacing={3} xs={12}>
+            <Grid container direction="column" alignContent="center" alignItems="center" className={classes.fullH} spacing={3}>
                 <Grid container item xs justify="center" alignItems="center">
                     <Grid item>
                         <Typography variant="h2" display="inline">Welcome to TactJam</Typography>
@@ -121,4 +121,4 @@ const ConnectionLayout = ({ onClickRefresh }: connlayoutInterface) => {
     )
 };
 
-export default ConnectionLayout
+export default LoginLayout;

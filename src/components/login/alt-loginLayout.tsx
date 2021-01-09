@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const LoginLayout = ({ onClickSubmit }: connlayoutInterface) => {
+const AltLoginLayout = ({ onClickSubmit }: connlayoutInterface) => {
     const classes = useStyles();
     const [userName, setUserName] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -71,4 +71,4 @@ const LoginLayout = ({ onClickSubmit }: connlayoutInterface) => {
     );
 };
 
-export default LoginLayout
+export default AltLoginLayout
