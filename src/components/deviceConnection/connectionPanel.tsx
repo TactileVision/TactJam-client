@@ -20,7 +20,11 @@ const useStyles = makeStyles((theme: Theme) => ({
         fontSize: '44px',
         lineHeight: '44px',
         paddingLeft: '5px',
-        boxShadow: '0 -2px 5px 0 #00000040',
+        boxShadow: '0 -2px 5px 0 #00000040'
+    },
+    drawer: {
+        overflow: 'hidden',
+        paddingBottom: 10
     },
     connected: {
         color: '#4791db'
@@ -72,7 +76,7 @@ function ConnectionPanel() {
             <IconButton aria-label="open connection panel" onClick={() => setOpened(true)}>
                 <ExpandLessIcon />
             </IconButton>
-            <Drawer id="drawer" anchor="bottom" open={opened} onClose={() => setOpened(false)}>
+            <Drawer id="drawer" anchor="bottom" open={opened} onClose={() => setOpened(false)} classes={{ paper: classes.drawer }}>
                 <Content/>
             </Drawer>
         </div>

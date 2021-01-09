@@ -21,10 +21,6 @@ const useStyles = makeStyles((theme: Theme) =>
         //     position: 'absolute',
         //     top: '50%',
         // },
-        root: {
-            flexGrow: 1,
-            height: '100vh',
-        },
         fullH: {
             height: '100%'
         },
@@ -86,7 +82,7 @@ const LoginLayout = ({ onClickRefresh }: connlayoutInterface) => {
         //         </Grid>
         //     </Grid>
         // </Grid>
-        <Grid container direction="column" alignContent="center" className={classes.root}>
+        <Grid container direction="column" alignContent="center" className={classes.fullH}>
             <Grid container direction="column" alignContent="center" alignItems="center" className={classes.fullH} spacing={3}>
                 <Grid container item xs justify="center" alignItems="center">
                     <Grid item>

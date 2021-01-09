@@ -16,7 +16,10 @@ export enum Layouts {
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    flexGrow: 1,
+    // flexGrow: 1,
+    width: '100%',
+    height: '100vh',
+      overflow: 'hidden'
   },
   tabs: {
     // borderRightStyle: "solid",
@@ -88,7 +91,7 @@ export default function NavTabs() {
       </Grid>
     </Grid>
   ) : (
-      <div>
+      <div className={classes.root}>
         {/*<ElectronNavbar />*/}
         <LoginLayout onClickRefresh={() => tryReconnectDev()} />
       </div>

@@ -7,9 +7,9 @@ import ConnectionPanel from "@/components/deviceConnection/connectionPanel";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
-        flexGrow: 1,
-        height: '95vh',
-        overflow: 'hidden'
+        // flexGrow: 1,
+        width: '100%',
+        height: '100%',
     },
     fullHeight: {
         'min-height': '100%',
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function MainLayout() {
   const classes = useStyles();
   return (
-      <div>
+      <div className={classes.root}>
         <Grid container spacing={0} className={classes.root}>
             <Grid container item xs={6} className={classes.fullHeight}> {/*style={{ borderRightStyle: 'solid', borderColor: 'black', borderWidth: '1em' }}>*/}
                 <TimeProfile />
