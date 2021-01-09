@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TimeProfile from '../timeProfile/timeProfile';
+import ActuatorPlacement from "@/components/actuatorsPlacement/actuatorsPlacement";
 import BodyPlacement from './bodyPlacement';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -23,7 +24,7 @@ export default function MainLayout() {
         <TimeProfile />
       </Grid>
       <Grid item xs={6}>
-        <BodyPlacement />
+        <ActuatorPlacement />
       </Grid>
     </Grid>
   );

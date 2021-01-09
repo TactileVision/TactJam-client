@@ -33,6 +33,8 @@ function randData(length: number): number[] {
 //   changeData() {
 //     this.setState({ data: [ randData(25), randData(25), randData(25) ] });
 //   }
+
+
 export default function TimeProfile() {
   const [ data, setData ]: [ number[][], any ] = React.useState(Array(8).fill(null));
 
@@ -46,7 +48,7 @@ export default function TimeProfile() {
               const colors = [ '#ab2056', '#5454ff', '#24ab24', '#9a9a9a', '#9a34ff', '#21abab','#ffff00', '#df8100' ];
               const startY = 30, stepY = 65;
               const res = colors.map((col: string, id) => {
-                return <ActuatorTimeProfile id={id+1} x={100} y={startY + stepY*id} width={400} height={60} color={col} data={data[id]}/>
+                return <ActuatorTimeProfile key={'timeProfile-'+id} id={id+1} x={100} y={startY + stepY*id} width={400} height={60} color={col} data={data[id]}/>
               });
               return res;
             })()}
