@@ -27,6 +27,7 @@
     "webpack-cli": "^4.3.1"
   },
   "dependencies": {
+    "@react-three/drei": "^2.2.15",
     "@vxna/gltf-loader": "^2.0.1",
     "d3": "^6.3.1",
     "file-loader": "^6.2.0",
