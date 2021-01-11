@@ -1,3 +1,4 @@
+# READ ME NOT UP TO DATE (todo)
 
 # Graphical User Interface for TactJam
 
