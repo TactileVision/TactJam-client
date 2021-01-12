@@ -24,7 +24,7 @@ export default function MainLayout() {
             <Grid container item xs={6} className={classes.fullHeight}> {/*style={{ borderRightStyle: 'solid', borderColor: 'black', borderWidth: '1em' }}>*/}
                 <TimeProfile />
             </Grid>
-            <Grid item xs={6}>
+            <Grid container item xs={6} className={classes.fullHeight}>
                 <ActuatorPlacement />
             </Grid>
         </Grid>
