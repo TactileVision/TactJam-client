@@ -87,10 +87,12 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
         return useRef<MeshProps>(null);
         //React.Ref<MeshProps>[] = [];
     });
+    let initialPos: number[][] = [];
 
     const createActuators = () => {
         const colors = [ 0xab2056, 0x5454ff, 0x24ab24, 0x9a9a9a, 0x9a34ff, 0x21abab, 0xffff00, 0xdf8100 ];
         return new Array(8).fill(null).map((el, i) => {
+            initialPos.push([(i*0.25)-1, 0.25, 0]);
             return <Actuator ref={actuators[i]} key={"actuator"+i} color={colors[i]} id={i} setSelectedActuator={props.setSelectedActuator}/>
         });
     };
@@ -102,7 +104,7 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
         for(let i = 0; i < actuators.length; i++) {
             //TODO fix types issues
             // @ts-ignore
-            actuators[i].current.position.set((i * 2 / actuators.length) - 1, 0.25, 0);
+            actuators[i].current.position.set(initialPos[i][0], initialPos[i][1], initialPos[i][2]);
             // @ts-ignore
             actuators[i].current.geometry.rotateX(Math.PI / 2);
         }
@@ -126,6 +128,10 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
                 // const lookPos = intersection.point.add(intersection.face.normal);
                 // // @ts-ignore
                 // mesh.geometry.lookAt(lookPos);
+            } else {
+                const pos = initialPos[props.selectedActuator];
+                // @ts-ignore
+                mesh.position.set(pos[0], pos[1], pos[2]);
             }
         }
     });
