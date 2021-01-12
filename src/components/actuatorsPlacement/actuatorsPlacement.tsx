@@ -67,7 +67,8 @@ const Actuator = React.forwardRef((props: ActuatorProps, ref: React.Ref<any>) =>
     return (
         <mesh ref={ref}
               onPointerDown={(event) => props.setSelectedActuator(props.id) }>
-            <boxBufferGeometry args={[0.05, 0.01, 0.05]}/>
+            {/*<cylinderBufferGeometry args={[0.03, 0.03, 0.015, 50]}/>*/}
+            <sphereBufferGeometry args={[0.025, 32, 32]}/>
             <meshStandardMaterial color={props.color} />
         </mesh>
     );
@@ -77,7 +78,8 @@ const Actuator = React.forwardRef((props: ActuatorProps, ref: React.Ref<any>) =>
 interface ActuatorControlsProps {
     selectedActuator: number,
     setSelectedActuator: SetSelectedActuator,
-    avatar: React.Ref<any>
+    avatar: React.Ref<any>,
+    controlCamera: boolean
 }
 
 const ActuatorControls = (props: ActuatorControlsProps) => {
@@ -108,7 +110,7 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
 
     // update every frame ==> used to move actuators around
     useFrame((state) => {
-        if(props.selectedActuator > -1) {
+        if(props.selectedActuator > -1 && !props.controlCamera) {
             //TODO deal with types
             // @ts-ignore
             const mesh = actuators[props.selectedActuator].current;
@@ -120,12 +122,10 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
             if (intersection && intersection.face) {
                 //TODO fix types issues
                 // @ts-ignore
-                mesh.geometry.translate(0,0,0);
-                // @ts-ignore
                 mesh.position.copy(intersection.point);
-                const lookPos = intersection.point.add(intersection.face.normal);
-                // @ts-ignore
-                mesh.geometry.lookAt(lookPos);
+                // const lookPos = intersection.point.add(intersection.face.normal);
+                // // @ts-ignore
+                // mesh.geometry.lookAt(lookPos);
             }
         }
     });
@@ -195,7 +195,8 @@ export default function ActuatorPlacement() {
                             <ActuatorControls
                                 selectedActuator={selectedActuator}
                                 setSelectedActuator={setSelectedActuator}
-                                avatar={avatar}/>
+                                avatar={avatar}
+                                controlCamera={controlCamera}/>
                         );
                     })()}
                 </Suspense>
