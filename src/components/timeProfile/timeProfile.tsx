@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import ActuatorTimeProfile from './actuatorTimeProfile';
 import { Grid, Button } from '@material-ui/core';
+let VTP = require('vtp.js/dist/vtp.cjs');
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -16,27 +17,44 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-function randData(length: number): number[] {
-  let data = [];
-  for(let i = 0; i < length; i++) { data.push(Math.random()); }
-  return data;
+
+interface VTPInstruction {
+    type: string,
+    channelSelect: number,
+    timeOffset: number,
+    amplitude: number,
+    frequency: number
+};
+
+interface tactonAttributes {
+    duration: number,
+    actuators: { [key: number]: { [key: string]: number }[] }
 }
 
-// class TimeProfile extends React.Component {
-//   constructor(props: object) {
-//     super(props);
-//     this.state = {
-//       data: Array(3).fill(null)
-//     }
-//   }
-//
-//   changeData() {
-//     this.setState({ data: [ randData(25), randData(25), randData(25) ] });
-//   }
+function hardcodedData(): tactonAttributes {
+    const instructionWords = new Uint8Array([
+        0x10, 0x00, 0x00, 0xEA, 0x20, 0x00, 0x00, 0x7B, 0x10, 0x20, 0x01, 0x59,
+        0x10, 0x20, 0xC9, 0xC8, 0x10, 0x10, 0x03, 0x15, 0x00, 0x00, 0x07, 0xD0,
+        0x20, 0x00, 0x00, 0xEA, 0x10, 0x20, 0x02, 0x37
+    ]).buffer;
 
+    const actuators: tactonAttributes["actuators"] = {};
+    for(let i = 1; i <= 8; i++) { actuators[i] = []; }
+    let currentTime = 0;
+    VTP.readInstructionWords(instructionWords)
+        .map(VTP.decodeInstruction)
+        .map((instruction: VTPInstruction) => {
+            currentTime += instruction.timeOffset;
+            if(instruction.type == 'SetAmplitude') {
+                actuators[instruction.channelSelect+1].push({ amplitude: instruction.amplitude, time: currentTime });
+            }
+        });
+
+    return { duration: currentTime, actuators };
+}
 
 export default function TimeProfile() {
-  const [ data, setData ]: [ number[][], any ] = React.useState(Array(8).fill(null));
+  const [ data, setData ] = React.useState<tactonAttributes>(hardcodedData);
 
   const classes = useStyles();
 
@@ -48,29 +66,17 @@ export default function TimeProfile() {
               const colors = [ '#ab2056', '#5454ff', '#24ab24', '#9a9a9a', '#9a34ff', '#21abab','#ffff00', '#df8100' ];
               const startY = 30, stepY = 65;
               const res = colors.map((col: string, id) => {
-                return <ActuatorTimeProfile key={'timeProfile-'+id} id={id+1} x={100} y={startY + stepY*id} width={400} height={60} color={col} data={data[id]}/>
+                return <ActuatorTimeProfile key={'timeProfile-'+id} id={id+1}
+                                            x={100} y={startY + stepY*id} width={400} height={60} color={col}
+                                            duration={ data.duration } data={ data.actuators[id+1] }/>
               });
               return res;
             })()}
-            
-            {/*<ActuatorTimeProfile id={1} x={50} y={25} width={250} height={150} color="red" data={data[0]}/>*/}
-            {/*<ActuatorTimeProfile id={2} x={50} y={100} width={250} height={150} color="blue" data={data[1]}/>*/}
-            {/*<ActuatorTimeProfile id={3} x={50} y={350} width={250} height={150} color="green" data={data[2]}/>*/}
           </svg>
         </Grid>
-        <Grid item xs={1}>
-          <Button onClick={() => setData(Array(8).fill(randData(25)))}>Change Data</Button>
-        </Grid>
+        {/*<Grid item xs={1}>*/}
+        {/*  <Button onClick={() => setData(hardcodedData())}>Change Data</Button>*/}
+        {/*</Grid>*/}
       </Grid>
   )
 }
-
-
-// export default function MainLayout() {
-//   const classes = useStyles();
-//   return (
-//     <div>
-//         Strength Pattern
-//     </div>
-//   );
-// }

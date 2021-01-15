@@ -9,7 +9,9 @@ interface PlotCharacteristics {
     width: number,
     height: number,
     color: string,
-    data: number[],
+    duration: number,
+    // data: number[],
+    data: { [key: string]: number }[]
 }
 
 
@@ -26,7 +28,7 @@ class ActuatorTimeProfile extends React.Component<PlotCharacteristics> {
 
         this.xScale.domain([0, 19])//.nice()
             .range([props.x, props.x + props.width]);
-        this.yScale.domain([0, 1])//.nice()
+        this.yScale.domain([0, 1024])//.nice()
             .range([props.y, props.y - props.height / 2]);
     }
 
@@ -35,21 +37,37 @@ class ActuatorTimeProfile extends React.Component<PlotCharacteristics> {
         const data = this.props.data;
         if(data === null || data.length === 0) return;
 
-        this.xScale.domain([0, data.length-1]);
+        console.log(this.props.id, data);
 
+        this.xScale.domain([0, this.props.duration]);
+
+        //TODO use only one variable for both path
         let line = d3.path();
         let area = d3.path();
-        data.forEach((d, i) => {
-            if(i === 0) {
-                line.moveTo(this.xScale(i), this.yScale(d));
-                area.moveTo(this.xScale(0), this.yScale(0));
-                area.lineTo(this.xScale(i), this.yScale(d));
-            } else {
-                line.lineTo(this.xScale(i), this.yScale(d));
-                area.lineTo(this.xScale(i), this.yScale(d));
+        let prevAmp = 0;
+        
+        // set line at 0 if actuator does not start right away
+        if(data[0].time !== 0) {
+            line.moveTo(this.xScale(0), this.yScale(0));
+            area.moveTo(this.xScale(0), this.yScale(0));
+        }
+        // or place both path at the right amplitude already (area will update in the first iteration)
+        else {
+            line.moveTo(this.xScale(0), this.yScale(data[0].amplitude));
+            area.moveTo(this.xScale(0), this.yScale(0));
+        }
+        data.forEach((timestamp, i) => {
+            // always draw straight line from previous amplitude
+            if(i !== 0) {
+                line.lineTo(this.xScale(timestamp.time), this.yScale(prevAmp));
+                area.lineTo(this.xScale(timestamp.time), this.yScale(prevAmp));
+                prevAmp = timestamp.amplitude;
             }
+            // draw line to current amplitude
+            line.lineTo(this.xScale(timestamp.time), this.yScale(timestamp.amplitude));
+            area.lineTo(this.xScale(timestamp.time), this.yScale(timestamp.amplitude));
         });
-        area.lineTo(this.xScale.range()[1], this.yScale(0));
+        area.lineTo(this.xScale(this.props.duration), this.yScale(0));
         area.closePath();
 
         this.line = line.toString();
@@ -57,7 +75,7 @@ class ActuatorTimeProfile extends React.Component<PlotCharacteristics> {
     }
 
     displayData() {
-        if(this.line === null) { return; }
+        if(this.props.data !== null && this.line === null) { return; }
         else {
             const sx = 1, sy = -1; // reflect horizontally
             const tx = this.props.x - sx * this.props.x, ty = this.props.y - sy * this.props.y;
