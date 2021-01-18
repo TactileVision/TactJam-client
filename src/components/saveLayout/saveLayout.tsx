@@ -35,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'center',
     },
+    hide: {
+        display: 'none'
+    }
 }));
 
 const ITEM_HEIGHT = 48;
@@ -49,7 +52,7 @@ const MenuProps = {
 };
 
 
-const SaveLayout = () => {
+const SaveLayout = (props: { active: boolean }) => {
     const classes = useStyles();
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
@@ -70,7 +73,8 @@ const SaveLayout = () => {
     };
 
     return (
-        <Grid container justify="center" spacing={3}>
+        // <Grid container justify="center" spacing={3} hidden={!props.active}>
+        <Grid container justify="center" spacing={3} className={!props.active ? classes.hide : ''}>
             <Grid item xs={2} />
             <Grid item xs={8}>
                 <form onSubmit={handleSubmit}>

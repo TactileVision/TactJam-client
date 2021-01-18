@@ -3,6 +3,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import ActuatorTimeProfile from './actuatorTimeProfile';
 import { Grid, Button } from '@material-ui/core';
 let VTP = require('vtp.js/dist/vtp.cjs');
+import { ipcRenderer } from 'electron';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -46,7 +47,13 @@ function hardcodedData(): tactonAttributes {
         .map((instruction: VTPInstruction) => {
             currentTime += instruction.timeOffset;
             if(instruction.type == 'SetAmplitude') {
-                actuators[instruction.channelSelect+1].push({ amplitude: instruction.amplitude, time: currentTime });
+                if(instruction.channelSelect !== 0) {
+                    actuators[instruction.channelSelect+1].push({ amplitude: instruction.amplitude, time: currentTime });
+                }
+                // channel = 0 means all actuators must change
+                else {
+                    Object.keys(actuators).forEach((key, i) => actuators[+key].push({ amplitude: instruction.amplitude, time: currentTime }));
+                }
             }
         });
 
@@ -57,6 +64,12 @@ export default function TimeProfile() {
   const [ data, setData ] = React.useState<tactonAttributes>(hardcodedData);
 
   const classes = useStyles();
+
+  //TODO implement sending tactons from the serial connection
+  ipcRenderer.on('received_tacton', (event, args) => {
+    //TODO parse args
+    // setData(args.data);
+  });
 
   return (
       <Grid container item direction="column" alignContent="center" justify="center">

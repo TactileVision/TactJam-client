@@ -41,6 +41,12 @@ app.on("activate", function () {
 });
 
 
+// testing out ipc messages
+
+ipcMain.on('asynchronous-message', (event, arg) => {
+  console.log("received an IPC message");
+});
+
 
 //TODO add serial port functionalities
 

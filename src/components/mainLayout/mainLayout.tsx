@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import TimeProfile from '../timeProfile/timeProfile';
 import ActuatorPlacement from "@/components/actuatorsPlacement/actuatorsPlacement";
 import ConnectionPanel from "@/components/deviceConnection/connectionPanel";
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -13,13 +14,19 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     fullHeight: {
         'min-height': '100%',
+        maxHeight: 720,
+    },
+    hide: {
+        display: 'none'
     }
 }));
 
-export default function MainLayout() {
+export default function MainLayout(props: { active: boolean }) {
   const classes = useStyles();
+
   return (
-      <div className={classes.root}>
+      // <div className={classes.root} hidden={!props.active}>
+      <div className={clsx(classes.root, !props.active ? classes.hide : '')}>
         <Grid container spacing={0} className={classes.root}>
             <Grid container item xs={6} className={classes.fullHeight}> {/*style={{ borderRightStyle: 'solid', borderColor: 'black', borderWidth: '1em' }}>*/}
                 <TimeProfile />

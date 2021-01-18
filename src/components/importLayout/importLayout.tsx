@@ -16,9 +16,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ImportCard from './importCard'
 
-interface importLayoutInterface {
-    slotNumber: number;
-}
+// interface importLayoutInterface {
+//     slotNumber: number;
+// }
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme: Theme) =>
         noLabel: {
             marginTop: theme.spacing(3),
         },
+        hide: {
+            display: 'none'
+        }
     }),
 );
 
@@ -69,7 +72,8 @@ const tactJamPatterns = [
     { id: 3, title: "test", tags: ["body", "head"] },
 ];
 
-const ImportLayout = ({ slotNumber }: importLayoutInterface) => {
+// const ImportLayout = ({ slotNumber }: importLayoutInterface) => {
+const ImportLayout = (props: { active: boolean }) => {
     const classes = useStyles();
     const [personName, setPersonName] = React.useState<string[]>([]);
     const [firstPatterns, setFirstPatterns] = React.useState<{ id: number; title: string; tags: string[]; }[]>();
@@ -91,7 +95,8 @@ const ImportLayout = ({ slotNumber }: importLayoutInterface) => {
     };
 
     return (
-        <Grid container spacing={3}>
+        // <Grid container spacing={3} hidden={!props.active}>
+        <Grid container spacing={3} className={!props.active ? classes.hide : ''}>
             <Grid item xs={12}>
                 <FormControl className={classes.formControl}>
                     <InputLabel id="mutiple-checkbox-label">Select your Tags</InputLabel>

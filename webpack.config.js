@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 const path = require('path');
 
 // Electron Webpack Configuration
@@ -77,9 +78,12 @@ const reactConfiguration = {
       filename: 'renderer.js'
     },
     plugins: [
-      new HtmlWebpackPlugin({
-        template: './src/index.html'
-      })
+        new HtmlWebpackPlugin({
+            template: './src/index.html'
+        }),
+        new webpack.ExternalsPlugin('commonjs', [
+            'electron'
+        ])
     ]
   }
 

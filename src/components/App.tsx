@@ -7,6 +7,7 @@ import SaveLayout from './saveLayout/saveLayout';
 import CustomTab from './Navbar/CustomTab';
 import ElectronNavbar from './Navbar/electronNavbar';
 import LoginLayout from './login/loginLayout';
+import TactonLayout from './tactonLayout/tactonLayout';
 
 export enum Layouts {
   MainLayout,
@@ -22,23 +23,9 @@ const useStyles = makeStyles((theme: Theme) => ({
       overflow: 'hidden'
   },
   tabs: {
-    // borderRightStyle: "solid",
-    // borderLeftStyle: "solid",
-    // borderBottomStyle: "solid",
-    // borderBlockColor: 'black',
-    // backgroundColor: "#3f51b5",
-    minHeight: 40,
+    height: 50,
     textAlign: 'center',
-  },
-  middleTab: {
-    // borderRightStyle: "solid",
-    // borderLeftStyle: "solid",
-    // borderBottomStyle: "solid",
-    // borderBlockColor: 'black',
-    // backgroundColor: "#3f51b5",
-    minHeight: 40,
-    textAlign: 'center',
-  },
+  }
 }));
 
 
@@ -57,35 +44,27 @@ export default function NavTabs() {
   const tryReconnectDev = () => {
     setDevConnected(true)
   }
-  
+
+  const createTabs = () => {
+    return Array(3).fill(null).map((el, i) => {
+      return (
+          <Grid item xs={4} className={classes.tabs} key={'tab'+i}>
+            <CustomTab
+                onClickTab={(slotNumber: number, layout: Layouts) => handleChange(slotNumber, layout)}
+                slotNumber={i+1}
+                selected={activeSlot === i+1}
+            />
+          </Grid>
+      );
+    })
+  }
+
   return devConnected ? (
     <Grid container spacing={0} className={classes.root}>
-      <Grid item xs={4} className={classes.tabs}>
-        <CustomTab
-          onClickTab={(slotNumber: number, layout: Layouts) => handleChange(slotNumber, layout)}
-          slotNumber={1}
-          selected={activeSlot === 1}
-        />
-      </Grid>
-      <Grid item xs={4} className={classes.middleTab}>
-        <CustomTab
-          onClickTab={(slotNumber: number, layout: Layouts) => handleChange(slotNumber, layout)}
-          slotNumber={2}
-          selected={activeSlot === 2}
-        />
-      </Grid>
-      <Grid item xs={4} className={classes.tabs}>
-        <CustomTab
-          onClickTab={(slotNumber: number, layout: Layouts) => handleChange(slotNumber, layout)}
-          slotNumber={3}
-          selected={activeSlot === 3}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        {currentLayout === Layouts.MainLayout && <MainLayout />}
-        {currentLayout === Layouts.ImportLayout && <ImportLayout slotNumber={activeSlot} />}
-        {currentLayout === Layouts.SaveLayout && <SaveLayout />}
-      </Grid>
+      { createTabs() }
+      <TactonLayout layout={currentLayout} active={activeSlot === 1}/>
+      <TactonLayout layout={currentLayout} active={activeSlot === 2}/>
+      <TactonLayout layout={currentLayout} active={activeSlot === 3}/>
     </Grid>
   ) : (
       <div className={classes.root}>
