@@ -155,7 +155,8 @@ const useStyles = makeStyles((theme: Theme) => ({
         position: "relative"
     },
     canvas: {
-        height: '100%',
+        minHeight: 700,
+        maxHeight: 700
     },
     fixed: {
         position: 'absolute',
@@ -190,7 +191,7 @@ export default function ActuatorPlacement() {
                 {(() => controlCamera ? <ControlCamera/> : <PanTool/>)()}
             </IconButton>
             <Canvas
-                camera={{fov: 35, aspect: 1, near: 0.1, far: 100, position:[0,1,4]}}
+                camera={{fov: 35, aspect: 1, near: 0.1, far: 100, position:[0,0.8,4]}}
                 className={clsx(classes.canvas, controlCamera ? classes.controlCamCursor : classes.controlActuatorsCursor)}
                 id="canvas3D"
                 onPointerUp={() => setSelectedActuator(-1) }>
