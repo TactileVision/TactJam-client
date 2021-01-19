@@ -7,6 +7,7 @@ import * as THREE from 'three';
 import {Grid, IconButton, RootRefProps} from "@material-ui/core";
 import {ControlCamera, PanTool} from "@material-ui/icons";
 import {makeStyles, Theme} from "@material-ui/core/styles";
+import clsx from "clsx";
 
 
 /*** camera control section ***/
@@ -153,6 +154,9 @@ const useStyles = makeStyles((theme: Theme) => ({
         height: '100%',
         position: "relative"
     },
+    canvas: {
+        height: '100%',
+    },
     fixed: {
         position: 'absolute',
         top: 15,
@@ -187,7 +191,7 @@ export default function ActuatorPlacement() {
             </IconButton>
             <Canvas
                 camera={{fov: 35, aspect: 1, near: 0.1, far: 100, position:[0,1,4]}}
-                className={controlCamera ? classes.controlCamCursor : classes.controlActuatorsCursor}
+                className={clsx(classes.canvas, controlCamera ? classes.controlCamCursor : classes.controlActuatorsCursor)}
                 id="canvas3D"
                 onPointerUp={() => setSelectedActuator(-1) }>
                 <CameraControls enableControl={controlCamera}/>

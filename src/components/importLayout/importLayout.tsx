@@ -72,8 +72,14 @@ const tactJamPatterns = [
     { id: 3, title: "test", tags: ["body", "head"] },
 ];
 
+
+interface ImportLayoutProps {
+    active: boolean,
+    cancel: () => void,
+}
+
 // const ImportLayout = ({ slotNumber }: importLayoutInterface) => {
-const ImportLayout = (props: { active: boolean }) => {
+const ImportLayout = (props: ImportLayoutProps) => {
     const classes = useStyles();
     const [personName, setPersonName] = React.useState<string[]>([]);
     const [firstPatterns, setFirstPatterns] = React.useState<{ id: number; title: string; tags: string[]; }[]>();
@@ -137,6 +143,14 @@ const ImportLayout = (props: { active: boolean }) => {
                             ))}
                         </List>
                     </div>
+                </Grid>
+            </Grid>
+            <Grid item container xs={12} justify="center" alignContent="center" style={{ marginTop: 60 }}>
+                <Grid item>
+                    <Button variant="contained"
+                            onClick={() => props.cancel()}>
+                        Cancel
+                    </Button>
                 </Grid>
             </Grid>
         </Grid>

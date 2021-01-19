@@ -19,7 +19,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface TactonLayoutProps {
     layout: Layouts,
-    active: boolean
+    active: boolean,
+    changeLayout: (layout: Layouts) => void,
 };
 
 export default function TactonLayout(props: TactonLayoutProps) {
@@ -30,8 +31,8 @@ export default function TactonLayout(props: TactonLayoutProps) {
   return (
       <Grid item xs={12} hidden={!props.active}>
           <MainLayout active={props.layout === Layouts.MainLayout}/>
-          <ImportLayout active={props.layout === Layouts.ImportLayout}/>
-          <SaveLayout active={props.layout === Layouts.SaveLayout}/>
+          <ImportLayout active={props.layout === Layouts.ImportLayout} cancel={() => props.changeLayout(Layouts.MainLayout)}/>
+          <SaveLayout active={props.layout === Layouts.SaveLayout} cancel={() => props.changeLayout(Layouts.MainLayout)}/>
       </Grid>
   );
 }

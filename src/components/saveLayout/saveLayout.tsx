@@ -34,6 +34,10 @@ const useStyles = makeStyles((theme) => ({
     buttonContainer: {
         display: 'flex',
         justifyContent: 'center',
+        marginTop: 60
+    },
+    formElement: {
+        margin: '15px 0',
     },
     hide: {
         display: 'none'
@@ -52,7 +56,12 @@ const MenuProps = {
 };
 
 
-const SaveLayout = (props: { active: boolean }) => {
+interface SaveLayoutProps {
+    active: boolean,
+    cancel: () => void
+}
+
+const SaveLayout = (props: SaveLayoutProps) => {
     const classes = useStyles();
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
@@ -85,6 +94,7 @@ const SaveLayout = (props: { active: boolean }) => {
                             value={title}
                             helperText="This field is required"
                             error={error}
+                            className={classes.formElement}
                         />
                         <TextField
                             id="description"
@@ -94,8 +104,10 @@ const SaveLayout = (props: { active: boolean }) => {
                             value={description}
                             helperText="This field is required"
                             error={error}
+                            className={classes.formElement}
                         />
-                        <FormControl>
+                        <FormControl
+                            className={classes.formElement}>
                             <InputLabel id="tags-label">Select your Tags</InputLabel>
                             <Select
                                 labelId="tags-label"
@@ -115,7 +127,8 @@ const SaveLayout = (props: { active: boolean }) => {
                                 ))}
                             </Select>
                         </FormControl>
-                        <FormControl>
+                        <FormControl
+                            className={classes.formElement}>
                             <InputLabel id="body-parts-label">Select the used bodyparts</InputLabel>
                             <Select
                                 labelId="body-parts-label"
@@ -136,9 +149,15 @@ const SaveLayout = (props: { active: boolean }) => {
                             </Select>
                         </FormControl>
                         <div className={classes.buttonContainer}>
-                            <Button type="submit" variant="outlined" color="primary" className={classes.button} style={{ marginTop: '60px' }}>
+                            <Button type="submit" variant="contained" color="primary"
+                                    className={classes.button}>
                                 Submit
-                        </Button>
+                            </Button>
+                            <Button variant="contained"
+                                    className={classes.button}
+                                    onClick={() => props.cancel()}>
+                                Cancel
+                            </Button>
                         </div>
                     </FormControl>
                 </form>
