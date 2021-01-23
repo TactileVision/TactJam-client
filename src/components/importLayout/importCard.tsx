@@ -15,6 +15,8 @@ interface importCardInterface {
 const useStyles = makeStyles({
     root: {
         minWidth: 275,
+        margin:'10px',
+        padding:'0px'
     },
     bullet: {
         display: 'inline-block',
