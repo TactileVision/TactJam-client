@@ -76,19 +76,21 @@ const Actuator = React.forwardRef((props: ActuatorProps, ref: React.Ref<any>) =>
 });
 
 
+interface UpdatePositions { (positions: THREE.Vector3[]): void; }
 interface ActuatorControlsProps {
     selectedActuator: number,
     setSelectedActuator: SetSelectedActuator,
     avatar: React.Ref<any>,
-    controlCamera: boolean
+    controlCamera: boolean,
+    updatePositions: UpdatePositions
 }
 
 const ActuatorControls = (props: ActuatorControlsProps) => {
     let actuators = new Array(8).fill(null).map((el, i) => {
         return useRef<MeshProps>(null);
-        //React.Ref<MeshProps>[] = [];
     });
     let initialPos: number[][] = [];
+    let needUpdate = false; // flag to update actuators positions in parent
 
     const createActuators = () => {
         const colors = [ 0xab2056, 0x5454ff, 0x24ab24, 0x9a9a9a, 0x9a34ff, 0x21abab, 0xffff00, 0xdf8100 ];
@@ -113,6 +115,11 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
 
     // update every frame ==> used to move actuators around
     useFrame((state) => {
+        //TODO optimize number of updates
+        if(needUpdate) {
+            props.updatePositions(actuators.map<any>((el, i) => el.current ? el.current.position : null));
+            needUpdate = false;
+        }
         if(props.selectedActuator > -1 && !props.controlCamera) {
             //TODO deal with types
             // @ts-ignore
@@ -126,6 +133,7 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
                 //TODO fix types issues
                 // @ts-ignore
                 mesh.position.copy(intersection.point);
+                needUpdate = true;
                 // const lookPos = intersection.point.add(intersection.face.normal);
                 // // @ts-ignore
                 // mesh.geometry.lookAt(lookPos);
@@ -179,6 +187,12 @@ export default function ActuatorPlacement() {
     const [ controlCamera, enableControlCamera ] = useState(true);
 
     let avatar: React.Ref<MeshProps> = useRef(null);
+    
+    let actuatorsPositions = new Array(8).fill(null).map(() => new THREE.Vector3(0, 0, 0));
+    const updateActuatorsPositions = (positions: THREE.Vector3[]) => {
+        positions.forEach((el, i) => actuatorsPositions[i].copy(el));
+        // console.log(positions);
+    };
 
     const classes = useStyles();
 
@@ -194,7 +208,7 @@ export default function ActuatorPlacement() {
                 camera={{fov: 35, aspect: 1, near: 0.1, far: 100, position:[0,0.8,4]}}
                 className={clsx(classes.canvas, controlCamera ? classes.controlCamCursor : classes.controlActuatorsCursor)}
                 id="canvas3D"
-                onPointerUp={() => setSelectedActuator(-1) }>
+                onPointerUp={() => { setSelectedActuator(-1); console.log(actuatorsPositions); } }>
                 <CameraControls enableControl={controlCamera}/>
                 <ambientLight color={0xffffff} intensity={0.5}/>
                 <Suspense fallback={null}>
@@ -207,7 +221,8 @@ export default function ActuatorPlacement() {
                                 selectedActuator={selectedActuator}
                                 setSelectedActuator={setSelectedActuator}
                                 avatar={avatar}
-                                controlCamera={controlCamera}/>
+                                controlCamera={controlCamera}
+                                updatePositions={updateActuatorsPositions}/>
                         );
                     })()}
                 </Suspense>

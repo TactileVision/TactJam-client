@@ -4,6 +4,7 @@ import ActuatorTimeProfile from './actuatorTimeProfile';
 import { Grid, Button } from '@material-ui/core';
 let VTP = require('vtp.js/dist/vtp.cjs');
 import { ipcRenderer } from 'electron';
+import tactons from './hardcodedTactons';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -32,6 +33,7 @@ interface tactonAttributes {
     actuators: { [key: number]: { [key: string]: number }[] }
 }
 
+
 function hardcodedData(): tactonAttributes {
     const instructionWords = new Uint8Array([
         0x10, 0x00, 0x00, 0xEA, 0x20, 0x00, 0x00, 0x7B, 0x10, 0x20, 0x01, 0x59,
@@ -42,8 +44,9 @@ function hardcodedData(): tactonAttributes {
     const actuators: tactonAttributes["actuators"] = {};
     for(let i = 1; i <= 8; i++) { actuators[i] = []; }
     let currentTime = 0;
-    VTP.readInstructionWords(instructionWords)
-        .map(VTP.decodeInstruction)
+    //TODO use instruction words
+    // VTP.readInstructionWords(instructionWords)
+    tactons[0].map((el: object, i: number) => VTP.decodeInstruction(el))
         .map((instruction: VTPInstruction) => {
             currentTime += instruction.timeOffset;
             if(instruction.type == 'SetAmplitude') {
