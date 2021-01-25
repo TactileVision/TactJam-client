@@ -58,11 +58,10 @@ class ActuatorTimeProfile extends React.Component<PlotCharacteristics> {
         }
         data.forEach((timestamp, i) => {
             // always draw straight line from previous amplitude
-            if(i !== 0) {
-                line.lineTo(this.xScale(timestamp.time), this.yScale(prevAmp));
-                area.lineTo(this.xScale(timestamp.time), this.yScale(prevAmp));
-                prevAmp = timestamp.amplitude;
-            }
+            line.lineTo(this.xScale(timestamp.time), this.yScale(prevAmp));
+            area.lineTo(this.xScale(timestamp.time), this.yScale(prevAmp));
+            prevAmp = timestamp.amplitude;
+            
             // draw line to current amplitude
             line.lineTo(this.xScale(timestamp.time), this.yScale(timestamp.amplitude));
             area.lineTo(this.xScale(timestamp.time), this.yScale(timestamp.amplitude));
