@@ -38,7 +38,10 @@ const electronConfiguration = {
   output: {
     path: __dirname + '/dist',
     filename: 'main.js'
-  }
+  },
+    externals: {
+      serialport: 'commonjs2 serialport'
+    }
 }
 
 const reactConfiguration = {
@@ -91,3 +94,4 @@ module.exports = [
   electronConfiguration,
   reactConfiguration
 ];
+

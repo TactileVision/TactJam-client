@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { IconButton, Drawer, Grid, Typography } from "@material-ui/core";
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import PublishIcon from '@material-ui/icons/Publish';
 import {makeStyles, Theme} from "@material-ui/core/styles";
-
+import { ipcRenderer } from 'electron';
 
 const useStyles = makeStyles((theme: Theme) => ({
     centeredButton: {
@@ -43,7 +43,13 @@ function ConnectionPanel() {
 
     const [opened, setOpened] = React.useState(false);
     const [connected, setConnected] = React.useState(false);
-    
+
+    // update view on device (dis)connection
+    ipcRenderer.on('deviceConnection', (event, connected) => setConnected(connected));
+
+    // asks state of connection on first render
+    useEffect(() => ipcRenderer.send('isDeviceConnected'), []);
+
     const Content = () => {
         return (
             <Grid container direction="column" alignContent="center" alignItems="center">
@@ -56,7 +62,7 @@ function ConnectionPanel() {
                     <Grid item xs={2}>
                         <Typography variant="body1">
                             <FiberManualRecordIcon className={connected ? classes.connected : classes.disconnected} style={{ verticalAlign: 'bottom' }}/>
-                            No device connected
+                            {connected ? "Device connected" : "No device connected"}
                         </Typography>
                     </Grid>
                     <Grid item xs={2}/>

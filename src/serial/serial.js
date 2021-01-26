@@ -8,7 +8,9 @@ function SerialConnection() {
     const connection = {
         checkPortsContinuously: () => {},
         // callback once device is connected and detected
-        deviceConnected: (port) => {}
+        onDeviceConnect: (port) => {},
+        onDeviceDisconnect: (port) => {},
+        deviceConnected: false
     }
 
     const openPortAndListen = (port) => {
@@ -37,9 +39,10 @@ function SerialConnection() {
                 //TODO check if message matches the "welcome" message
                 console.log('Received: ' + line);
                 if(line.trim() === "welcome") {
-                    console.log("yeah");
+                    // console.log("yeah");
                     tactjamPort = serialPort;
-                    connection.deviceConnected(tactjamPort);
+                    connection.onDeviceConnect(tactjamPort);
+                    connection.deviceConnected = true;
                     tactjamPort.write("received");
                 }
             });
@@ -57,7 +60,9 @@ function SerialConnection() {
             // if no device connected => close all former connections
             const ports = Object.keys(serialPorts);
             if (ports.length > 0) ports.forEach(port => delete serialPorts[port]);
+            if(tactjamPort) connection.onDeviceDisconnect();
             tactjamPort = null;
+            connection.deviceConnected = false;
         } else if(tactjamPort === null) {
             // if no device is connected, listen to all ports
             let serialPorts = ports.map((port, i) => openPortAndListen(port));
@@ -68,7 +73,7 @@ function SerialConnection() {
     }
 
     connection.checkPortsContinuously = () => {
-        console.log("### Checking ports... ###");
+        // console.log("### Checking ports... ###");
         SerialPort.list().then(connectToDevice)
     }
 

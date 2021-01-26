@@ -49,11 +49,23 @@ ipcMain.on('asynchronous-message', (event, arg) => {
 
 
 //TODO add serial port functionalities
-// const serialConnection = require('./serial/serial');
-//
-// serialConnection.deviceConnected = (port: any) => {
-//   console.log("Device connected!")
-//   //TODO listen to tactons and send their configurations to the GUI
-// }
-//
-// serialConnection.checkPortsContinuously()
+const serialConnection = require('./serial/serial');
+
+serialConnection.onDeviceConnect = (port: any) => {
+  console.log("Device connected!")
+  //TODO listen to tactons and send their configurations to the GUI
+  mainWindow?.webContents.send('deviceConnection', true);
+}
+
+serialConnection.onDeviceDisconnect = () => {
+  mainWindow?.webContents.send('deviceConnection', false);
+}
+
+ipcMain.on('isDeviceConnected', (event) => {
+  event.reply('deviceConnection', serialConnection.deviceConnected);
+});
+
+// start checking ports continuously
+serialConnection.checkPortsContinuously()
+
+
