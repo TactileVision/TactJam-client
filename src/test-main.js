@@ -1,6 +1,6 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+let { app, BrowserWindow } = require('electron');
 
-let mainWindow: Electron.BrowserWindow | null;
+let mainWindow = null;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -25,7 +25,7 @@ function createWindow() {
 }
 
 app.on("ready", createWindow);
-app.on("browser-window-created",function(e: any, window: Electron.BrowserWindow) {
+app.on("browser-window-created",function(el, window) {
   window.setMenu(null);
 });
 app.on("window-all-closed", function () {
@@ -41,19 +41,12 @@ app.on("activate", function () {
 });
 
 
-// testing out ipc messages
-
-ipcMain.on('asynchronous-message', (event, arg) => {
-  console.log("received an IPC message");
-});
-
 
 //TODO add serial port functionalities
-// const serialConnection = require('./serial/serial');
-//
-// serialConnection.deviceConnected = (port: any) => {
-//   console.log("Device connected!")
-//   //TODO listen to tactons and send their configurations to the GUI
-// }
-//
-// serialConnection.checkPortsContinuously()
+const serialConnection = require('./serial/serial');
+
+serialConnection.deviceConnected = (port) => {
+  console.log("Device connected!")
+}
+
+serialConnection.checkPortsContinuously()

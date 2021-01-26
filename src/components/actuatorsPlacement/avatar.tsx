@@ -24,6 +24,7 @@ const Model = React.forwardRef((props: ModelProps, ref: React.Ref<any>) => {
 
   return (
       // <group ref={group} {...props} dispose={null}>
+      // @ts-ignore
       <mesh ref={ref} material={materials.DefaultMaterial} geometry={nodes.Mesh.geometry} />
       // </group>
   );

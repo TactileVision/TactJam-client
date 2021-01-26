@@ -18,6 +18,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "electron": "^11.1.1",
+    "electron-rebuild": "^2.3.4",
     "html-webpack-plugin": "^4.5.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -33,7 +34,7 @@
     "d3": "^6.3.1",
     "file-loader": "^6.2.0",
     "react-three-fiber": "^5.3.11",
-    "serialport": "^9.0.4",
+    "serialport": "^9.0.6",
     "three": "^0.124.0",
     "vtp.js": "^0.3.0"
   }
