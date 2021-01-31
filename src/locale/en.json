@@ -1,0 +1,19 @@
+{
+    "translation": {
+        "register": {
+            "matchPassword": "Password and confirm password must match",
+            "userNameSize": "The username must contain at least 4 chars",
+            "userNameTaken": "This username is already taken",
+            "emailTaken": "This email is already taken",
+            "passwordSize": "The password length must between 8 and 128 signs"
+        },
+        "other": {
+            "fieldRequired": "This field is required",
+            "unexpected": "Sorry something go wrong"
+        },
+        "login": {
+            "forgetCredentials": "Forgot username or password?",
+            "invalidCredentials": "Invalid combination of login and password"
+        }
+    }
+}

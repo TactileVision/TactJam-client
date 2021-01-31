@@ -54,7 +54,7 @@ const reactConfiguration = {
         ['@']: path.resolve(__dirname, 'src'),
         assets: path.resolve(__dirname, 'assets'),
       },
-      extensions: ['.tsx', '.ts', '.js', '.gltf'],
+      extensions: ['.tsx', '.ts', '.js', '.gltf', '.json'],
     },
     module: {
       rules: [
