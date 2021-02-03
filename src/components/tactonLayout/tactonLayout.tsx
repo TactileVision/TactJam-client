@@ -5,6 +5,7 @@ import MainLayout from "@/components/mainLayout/mainLayout";
 import ImportLayout from "@/components/importLayout/importLayout";
 import SaveLayout from "@/components/saveLayout/saveLayout";
 import { Layouts } from "../App";
+import { TactonContext, TactonProvider } from '../centralComponents/TactonContext';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -24,15 +25,17 @@ interface TactonLayoutProps {
 };
 
 export default function TactonLayout(props: TactonLayoutProps) {
-  const classes = useStyles();
+    const classes = useStyles();
 
-  //TODO add callbacks to handle tacton data
+    //TODO add callbacks to handle tacton data
 
-  return (
-      <Grid item xs={12} hidden={!props.active}>
-          <MainLayout active={props.layout === Layouts.MainLayout}/>
-          <ImportLayout active={props.layout === Layouts.ImportLayout} cancel={() => props.changeLayout(Layouts.MainLayout)}/>
-          <SaveLayout active={props.layout === Layouts.SaveLayout} cancel={() => props.changeLayout(Layouts.MainLayout)}/>
-      </Grid>
-  );
+    return (
+        <TactonProvider>
+            <Grid item xs={12} hidden={!props.active}>
+                <MainLayout active={props.layout === Layouts.MainLayout} />
+                <ImportLayout active={props.layout === Layouts.ImportLayout} cancel={() => props.changeLayout(Layouts.MainLayout)} />
+                <SaveLayout active={props.layout === Layouts.SaveLayout} cancel={() => props.changeLayout(Layouts.MainLayout)} />
+            </Grid>
+        </TactonProvider>
+    );
 }

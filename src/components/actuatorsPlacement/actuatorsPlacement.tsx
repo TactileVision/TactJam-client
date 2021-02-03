@@ -1,17 +1,18 @@
-import React, { useRef, useState, useEffect, Suspense } from 'react';
-import { Canvas, useFrame, useThree, extend, MeshProps} from 'react-three-fiber';
-import {DirectionalLight} from "react-three-fiber/components";
+import React, { useRef, useState, useEffect, Suspense, useContext } from 'react';
+import { Canvas, useFrame, useThree, extend, MeshProps } from 'react-three-fiber';
+import { DirectionalLight } from "react-three-fiber/components";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Model from './avatar';
 import * as THREE from 'three';
-import {Grid, IconButton, RootRefProps} from "@material-ui/core";
-import {ControlCamera, PanTool} from "@material-ui/icons";
-import {makeStyles, Theme} from "@material-ui/core/styles";
+import { Grid, IconButton, RootRefProps } from "@material-ui/core";
+import { ControlCamera, PanTool } from "@material-ui/icons";
+import { makeStyles, Theme } from "@material-ui/core/styles";
 import clsx from "clsx";
+import { TactonContext } from '../centralComponents/TactonContext';
 
 
 /*** camera control section ***/
-extend({OrbitControls});
+extend({ OrbitControls });
 
 function rotateLight(camera: THREE.Camera) {
     const v3 = new THREE.Vector3(4, 4, 4);
@@ -40,14 +41,14 @@ const CameraControls = (props: CameraControlsProps) => {
         light.current.position.copy(rotateLight(state.camera));
     });
     // @ts-ignore
-    return  (
+    return (
         <group>
             {/* @ts-ignore */}
             <orbitControls ref={controls}
-                           args={[camera, domElement]}
-                           target={[0,1,0]}
-                           enabled={props.enableControl} />
-            <DirectionalLight ref={light} position={camera.position}/>
+                args={[camera, domElement]}
+                target={[0, 1, 0]}
+                enabled={props.enableControl} />
+            <DirectionalLight ref={light} position={camera.position} />
         </group>
     );
 };
@@ -67,9 +68,9 @@ interface ActuatorProps {
 const Actuator = React.forwardRef((props: ActuatorProps, ref: React.Ref<any>) => {
     return (
         <mesh ref={ref}
-              onPointerDown={(event) => props.setSelectedActuator(props.id) }>
+            onPointerDown={(event) => props.setSelectedActuator(props.id)}>
             {/*<cylinderBufferGeometry args={[0.03, 0.03, 0.015, 50]}/>*/}
-            <sphereBufferGeometry args={[0.025, 32, 32]}/>
+            <sphereBufferGeometry args={[0.025, 32, 32]} />
             <meshStandardMaterial color={props.color} />
         </mesh>
     );
@@ -93,10 +94,10 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
     let needUpdate = false; // flag to update actuators positions in parent
 
     const createActuators = () => {
-        const colors = [ 0xab2056, 0x5454ff, 0x24ab24, 0x9a9a9a, 0x9a34ff, 0x21abab, 0xffff00, 0xdf8100 ];
+        const colors = [0xab2056, 0x5454ff, 0x24ab24, 0x9a9a9a, 0x9a34ff, 0x21abab, 0xffff00, 0xdf8100];
         return new Array(8).fill(null).map((el, i) => {
-            initialPos.push([(i*0.25)-1, 0.25, 0]);
-            return <Actuator ref={actuators[i]} key={"actuator"+i} color={colors[i]} id={i} setSelectedActuator={props.setSelectedActuator}/>
+            initialPos.push([(i * 0.25) - 1, 0.25, 0]);
+            return <Actuator ref={actuators[i]} key={"actuator" + i} color={colors[i]} id={i} setSelectedActuator={props.setSelectedActuator} />
         });
     };
 
@@ -104,7 +105,7 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
 
     // instantiate the actuators right after the render of this component
     useEffect(() => {
-        for(let i = 0; i < actuators.length; i++) {
+        for (let i = 0; i < actuators.length; i++) {
             //TODO fix types issues
             // @ts-ignore
             actuators[i].current.position.set(initialPos[i][0], initialPos[i][1], initialPos[i][2]);
@@ -116,11 +117,11 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
     // update every frame ==> used to move actuators around
     useFrame((state) => {
         //TODO optimize number of updates
-        if(needUpdate) {
+        if (needUpdate) {
             props.updatePositions(actuators.map<any>((el, i) => el.current ? el.current.position : null));
             needUpdate = false;
         }
-        if(props.selectedActuator > -1 && !props.controlCamera) {
+        if (props.selectedActuator > -1 && !props.controlCamera) {
             //TODO deal with types
             // @ts-ignore
             const mesh = actuators[props.selectedActuator].current;
@@ -147,7 +148,7 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
 
     return (
         <group>
-            { createActuators() }
+            { createActuators()}
         </group>
     );
 }
@@ -182,15 +183,16 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function ActuatorPlacement() {
     // change cursor mode (move actuator or move view)
-    const [ actuators, setActuators ] = useState(false);
-    const [ selectedActuator, setSelectedActuator ] = useState(-1);
-    const [ controlCamera, enableControlCamera ] = useState(true);
-
+    const [actuators, setActuators] = useState(false);
+    const [selectedActuator, setSelectedActuator] = useState(-1);
+    const [controlCamera, enableControlCamera] = useState(true);
+    const { actuatorPositions, updateActuators } = useContext(TactonContext)
     let avatar: React.Ref<MeshProps> = useRef(null);
-    
-    let actuatorsPositions = new Array(8).fill(null).map(() => new THREE.Vector3(0, 0, 0));
+
+    //let actuatorsPositions = new Array(8).fill(null).map(() => new THREE.Vector3(0, 0, 0));
     const updateActuatorsPositions = (positions: THREE.Vector3[]) => {
-        positions.forEach((el, i) => actuatorsPositions[i].copy(el));
+        //positions.forEach((el, i) => actuatorsPositions[i].copy(el));
+        updateActuators(positions);
         // console.log(positions);
     };
 
@@ -201,28 +203,28 @@ export default function ActuatorPlacement() {
             <IconButton
                 className={classes.fixed}
                 aria-label="switch camera control"
-                onClick={() => {enableControlCamera(!controlCamera)}} >
-                {(() => controlCamera ? <ControlCamera/> : <PanTool/>)()}
+                onClick={() => { enableControlCamera(!controlCamera) }} >
+                {(() => controlCamera ? <ControlCamera /> : <PanTool />)()}
             </IconButton>
             <Canvas
-                camera={{fov: 35, aspect: 1, near: 0.1, far: 100, position:[0,0.8,4]}}
+                camera={{ fov: 35, aspect: 1, near: 0.1, far: 100, position: [0, 0.8, 4] }}
                 className={clsx(classes.canvas, controlCamera ? classes.controlCamCursor : classes.controlActuatorsCursor)}
                 id="canvas3D"
-                onPointerUp={() => { setSelectedActuator(-1); console.log(actuatorsPositions); } }>
-                <CameraControls enableControl={controlCamera}/>
-                <ambientLight color={0xffffff} intensity={0.5}/>
+                onPointerUp={() => { setSelectedActuator(-1); console.log(actuatorPositions); }}>
+                <CameraControls enableControl={controlCamera} />
+                <ambientLight color={0xffffff} intensity={0.5} />
                 <Suspense fallback={null}>
                     {/*TODO not sure what's happening here
                     @ts-ignore */}
-                    <Model ref={avatar} setActuators={setActuators}/>
+                    <Model ref={avatar} setActuators={setActuators} />
                     {(() => {
-                        if(actuators) return (
+                        if (actuators) return (
                             <ActuatorControls
                                 selectedActuator={selectedActuator}
                                 setSelectedActuator={setSelectedActuator}
                                 avatar={avatar}
                                 controlCamera={controlCamera}
-                                updatePositions={updateActuatorsPositions}/>
+                                updatePositions={updateActuatorsPositions} />
                         );
                     })()}
                 </Suspense>
