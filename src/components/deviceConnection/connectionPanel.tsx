@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { IconButton, Drawer, Grid, Typography } from "@material-ui/core";
+import { Button, IconButton, Drawer, Grid, Typography } from "@material-ui/core";
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import PublishIcon from '@material-ui/icons/Publish';
 import {makeStyles, Theme} from "@material-ui/core/styles";
 import { ipcRenderer } from 'electron';
+import { TactonContext } from "@/components/centralComponents/TactonContext";
 
 const useStyles = makeStyles((theme: Theme) => ({
     centeredButton: {
@@ -50,29 +51,41 @@ function ConnectionPanel() {
     // asks state of connection on first render
     useEffect(() => ipcRenderer.send('isDeviceConnected'), []);
 
+    // send to server the tacton's data of this slot
+    function uploadTacton(slotNb: number, rawTacton: any) {
+        if(rawTacton) ipcRenderer.send('sendingTacton', { slotNb: slotNb, rawData: rawTacton })
+        else console.log("No tacton data to send to the device.")
+    }
+
     const Content = () => {
         return (
-            <Grid container direction="column" alignContent="center" alignItems="center">
-                <Grid item>
-                    <IconButton onClick={() => setOpened(false)}>
-                        <ExpandMoreIcon/>
-                    </IconButton>
-                </Grid>
-                <Grid container item justify="center" alignItems="center" spacing={1}>
-                    <Grid item xs={2}>
-                        <Typography variant="body1">
-                            <FiberManualRecordIcon className={connected ? classes.connected : classes.disconnected} style={{ verticalAlign: 'bottom' }}/>
-                            {connected ? "Device connected" : "No device connected"}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={2}/>
-                    <Grid item xs={1}>
-                        <IconButton>
-                            <PublishIcon/>
+            <TactonContext.Consumer>
+                {({slotNb, rawTacton}) => (
+                <Grid container direction="column" alignContent="center" alignItems="center">
+                    <Grid item>
+                        <IconButton onClick={() => setOpened(false)}>
+                            <ExpandMoreIcon/>
                         </IconButton>
                     </Grid>
+                    <Grid container item justify="center" alignItems="center" spacing={2}>
+                        <Grid item>
+                            <Typography variant="body1">
+                                <FiberManualRecordIcon className={connected ? classes.connected : classes.disconnected} style={{ verticalAlign: 'bottom' }}/>
+                                {connected ? "Device connected" : "No device connected"}
+                            </Typography>
+                        </Grid>
+                        {/*<Grid item xs={2}/>*/}
+                        <Grid item>
+                            <Button variant="outlined"
+                                    onClick={() => uploadTacton(slotNb, rawTacton)}
+                                    startIcon={<PublishIcon />}>
+                                Upload to device
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </Grid>
-            </Grid>
+                )}
+            </TactonContext.Consumer>
         );
     };
 

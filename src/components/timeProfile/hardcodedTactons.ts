@@ -42,6 +42,6 @@ let hardcodedTacton: object[] = [
 
 hardcodedTacton = hardcodedTacton.map(VTP.encodeInstruction);
 
-const tactons: object[][] = [hardcodedTacton];
+const tactons: object[][] = [VTP.writeInstructionWords(hardcodedTacton)];
 
 export default tactons;

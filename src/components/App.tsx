@@ -74,10 +74,10 @@ export default function NavTabs() {
 
   return userLoggedIn ? (
     <Grid container spacing={0} className={classes.root}>
-      { createTabs()}
-      <TactonLayout layout={currentLayout} active={activeSlot === 1} changeLayout={(layout: Layouts) => handleChange(1, layout)} />
-      <TactonLayout layout={currentLayout} active={activeSlot === 2} changeLayout={(layout: Layouts) => handleChange(2, layout)} />
-      <TactonLayout layout={currentLayout} active={activeSlot === 3} changeLayout={(layout: Layouts) => handleChange(3, layout)} />
+      { createTabs() }
+      <TactonLayout slotNb={1} layout={currentLayout} active={activeSlot === 1} changeLayout={(layout: Layouts) => handleChange(1, layout)} />
+      <TactonLayout slotNb={2} layout={currentLayout} active={activeSlot === 2} changeLayout={(layout: Layouts) => handleChange(2, layout)} />
+      <TactonLayout slotNb={3} layout={currentLayout} active={activeSlot === 3} changeLayout={(layout: Layouts) => handleChange(3, layout)} />
     </Grid>
   ) : (
       <div className={classes.root}>

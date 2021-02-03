@@ -49,16 +49,38 @@ ipcMain.on('asynchronous-message', (event, arg) => {
 
 
 //TODO add serial port functionalities
-const serialConnection = require('./serial/serial');
+const Readline = require('@serialport/parser-readline')
+const serialConnection = require('./serial/serial')
+let serialPort: any = null
 
 serialConnection.onDeviceConnect = (port: any) => {
   console.log("Device connected!")
-  //TODO listen to tactons and send their configurations to the GUI
   mainWindow?.webContents.send('deviceConnection', true);
+
+  // read data coming from connected device
+  serialPort = port
+  const parser = new Readline()
+  serialPort.pipe(parser)
+  parser.on('data', (line: string) => {
+    // only listening to tacton's received for now
+    if(!line.startsWith("<tacton")) return
+
+    const tacton: {slotNb: number, rawData: string} = { slotNb: 0, rawData: null };
+    // get slot number to update
+    tacton.slotNb = +line.match(/"[1-3]"/)[0][1]
+    // get bytes string
+    const bytes = line.match(/>.*</)[0]
+    //TODO translate string into Byte array
+    tacton.rawData = bytes.substring(1, bytes.length-2)
+    console.log("Received tacton: ")
+    console.log(tacton)
+    mainWindow?.webContents.send('tactonReceived', tacton)
+  })
 }
 
 serialConnection.onDeviceDisconnect = () => {
-  mainWindow?.webContents.send('deviceConnection', false);
+  mainWindow?.webContents.send('deviceConnection', false)
+  serialPort = null
 }
 
 ipcMain.on('isDeviceConnected', (event) => {
@@ -69,3 +91,10 @@ ipcMain.on('isDeviceConnected', (event) => {
 serialConnection.checkPortsContinuously()
 
 
+// sending tacton information to device
+ipcMain.on('sendingTacton', (event, tactonData: any) => {
+  //TODO translate ArrayBuffer into string to send
+  const msg = '<tacton lengthBytes="int" slotNumber="'+tactonData.slotNb+'">' + tactonData.rawData + '</tacton>'
+  console.log(msg)
+  serialPort?.write(msg)
+})

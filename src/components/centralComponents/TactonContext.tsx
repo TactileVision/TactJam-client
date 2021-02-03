@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useContext, useRef, useState, useEffect, MutableRefObject } from 'react';
 import * as THREE from 'three';
+import { ipcRenderer } from 'electron';
 import tactons from '../timeProfile/hardcodedTactons';
 let VTP = require('vtp.js/dist/vtp.cjs');
 
@@ -19,6 +20,7 @@ interface tactonAttributes {
 
 const TactonContext = createContext<
     {
+        slotNb: number,
         actuatorPositions: THREE.Vector3[],
         updateActuators: (actuators: THREE.Vector3[]) => void,
         rawTacton: ArrayBufferLike,
@@ -26,21 +28,26 @@ const TactonContext = createContext<
         setTacton: () => void
     }>(null);
 
-const TactonProvider = (props: { children: ReactNode }) => {
+const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
     const [state, setState] = useState({
         actuatorPositions: [] as THREE.Vector3[],
         rawTacton: null,
         encodedTacton: null,
-    });
+    })
 
     useEffect(() => {
         setState({
             ...state,
             actuatorPositions: new Array(8).fill(null).map(() => new THREE.Vector3(0, 0, 0))
         })
+
+        ipcRenderer.on('tactonReceived', (event, tactonData) => {
+            // update tacton information if this slot is the one targeted
+            if(tactonData.slotNb == props.slotNb) setState({ ...state, rawTacton: tactonData.rawData })
+        })
     }, [])
 
-    const updateActuatorsPostion = (actuators: THREE.Vector3[]) => {
+    const updateActuatorsPosition = (actuators: THREE.Vector3[]) => {
         setState({
             ...state,
             actuatorPositions: actuators
@@ -51,9 +58,8 @@ const TactonProvider = (props: { children: ReactNode }) => {
         const actuators: tactonAttributes["actuators"] = {};
         for (let i = 1; i <= 8; i++) { actuators[i] = []; }
         let currentTime = 0;
-        //TODO use instruction words
-        // VTP.readInstructionWords(instructionWords)
-        tactons[0].map((el: object, i: number) => VTP.decodeInstruction(el))
+        
+        VTP.readInstructionWords(tactons[0]).map((el: object, i: number) => VTP.decodeInstruction(el))
             .map((instruction: VTPInstruction) => {
                 currentTime += instruction.timeOffset;
                 if (instruction.type == 'SetAmplitude') {
@@ -69,6 +75,7 @@ const TactonProvider = (props: { children: ReactNode }) => {
 
         return { duration: currentTime, actuators };
     }
+
     const setNewTacton = () => {
         const instructionWords = new Uint8Array([
             0x10, 0x00, 0x00, 0xEA, 0x20, 0x00, 0x00, 0x7B, 0x10, 0x20, 0x01, 0x59,
@@ -87,13 +94,14 @@ const TactonProvider = (props: { children: ReactNode }) => {
     return (
         <TactonContext.Provider value={
             {
+                slotNb: props.slotNb,
                 actuatorPositions: state.actuatorPositions,
-                updateActuators: updateActuatorsPostion,
+                updateActuators: updateActuatorsPosition,
                 rawTacton: state.rawTacton,
                 encodedTacton: state.encodedTacton,
                 setTacton: setNewTacton,
             }}>
-            { props.children}
+            { props.children }
         </TactonContext.Provider>
     )
 }

@@ -22,16 +22,21 @@ export default function TimeProfile() {
   const classes = useStyles();
 
   //TODO implement sending tactons from the serial connection
-  ipcRenderer.on('received_tacton', (event, args) => {
-    //TODO parse args
-    // setData(args.data);
-  });
+  //taken care off in the TactonContext scope
+  // ipcRenderer.on('tacton_received', (event, args) => {
+  //   //TODO parse args
+  //   // setData(args.data);
+  //   console.log("time profile ok")
+  // });
+
+  const formatDuration = (duration: number) => {
+    return Math.floor(duration/1000)+"."+(duration%1000)+"s"
+  }
 
   return (
     <TactonContext.Consumer>
       {({ encodedTacton, setTacton }) => (
         <Grid container item direction="column" alignContent="center" justify="center">
-          {encodedTacton !== null ?
             <Grid item xs={10} className={classes.fullWidth}>
               <svg id="time-profile" className={classes.svg}>
                 {(() => {
@@ -40,15 +45,14 @@ export default function TimeProfile() {
                   const res = colors.map((col: string, id) => {
                     return <ActuatorTimeProfile key={'timeProfile-' + id} id={id + 1}
                       x={100} y={startY + stepY * id} width={400} height={60} color={col}
-                      duration={encodedTacton.duration} data={encodedTacton.actuators[id + 1]} />
+                      duration={encodedTacton ? encodedTacton.duration : 0}
+                      data={encodedTacton ? encodedTacton.actuators[id + 1] : null} />
                   });
                   return res;
                 })()}
+                <text className="timeProfile-duration" x={420} y={550}>Duration: {encodedTacton ? formatDuration(encodedTacton.duration) : 0}</text>
               </svg>
-            </Grid> :
-            <Grid item xs={12}>
-              We don't receive any tactons :(
-          </Grid>}
+            </Grid>
           <Button onClick={() => setTacton()}>Change Data</Button>
           {/*</Grid>*/}
         </Grid>

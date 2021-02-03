@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface TactonLayoutProps {
+    slotNb: number,
     layout: Layouts,
     active: boolean,
     changeLayout: (layout: Layouts) => void,
@@ -30,7 +31,7 @@ export default function TactonLayout(props: TactonLayoutProps) {
     //TODO add callbacks to handle tacton data
 
     return (
-        <TactonProvider>
+        <TactonProvider slotNb={props.slotNb}>
             <Grid item xs={12} hidden={!props.active}>
                 <MainLayout active={props.layout === Layouts.MainLayout} />
                 <ImportLayout active={props.layout === Layouts.ImportLayout} cancel={() => props.changeLayout(Layouts.MainLayout)} />
