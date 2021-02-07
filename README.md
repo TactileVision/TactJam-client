@@ -12,7 +12,7 @@ If you are looking for the GUI that provides information on the tactons loaded i
 
 ## How to build and develop the firmware
 
-The TactJam GUI is based on [Node.js](https://nodejs.org/en/), [React](https://reactjs.org/), [Webpack](https://webpack.js.org/), and [Electron](https://www.electronjs.org/). The whole structure relies on [npm](https://www.npmjs.com/). You can simply build the projects with the following commands:
+The TactJam GUI is based on [Node.js](https://nodejs.org/en/), [React](https://reactjs.org/), [Webpack](https://webpack.js.org/), and [Electron](https://www.electronjs.org/). The whole structure relies on [npm](https://www.npmjs.com/). You can simply build and run the project with the following commands:
 
 
 ```
