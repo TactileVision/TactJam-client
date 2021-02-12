@@ -20,6 +20,8 @@ The TactJam GUI is based on [Node.js](https://nodejs.org/en/), [React](https://r
 > npm run build && electron build/main.js
 ```
 
+To compile the Electron app into an executable, we use the [electron-builder](https://www.electron.build/) package. You first need to build your sources using the above command, and then run `> electron-builder --win --x64` or `--mac` or `--linux` based on your OS.
+
 
 ## How to contribute
 
