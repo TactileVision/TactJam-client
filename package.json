@@ -48,11 +48,19 @@
   },
   "build": {
     "appId": "TactJam.GUI",
-    "productName": "TactJam",
+    "productName": "TactJam 1.0.0",
     "copyright": "Copyright © 2021 Tactile Vision",
     "files": [ "build/*", "build/webpack-assets/*" ],
     "mac": {
-      "category": "your.app.category.type"
+      "category": "public.app-category.graphics-design",
+      "target": ["dmg", "pkg"]
+    },
+    "dmg": {
+      "title": "TactJam 1.0.0"
+    },
+    "linux": {
+      "target": ["AppImage", "tag.gz"],
+      "executableName": "TactJam 1.0.0"
     }
   }
 }
