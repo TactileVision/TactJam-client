@@ -1,7 +1,7 @@
 import React from 'react';
 import {makeStyles, MuiThemeProvider, createMuiTheme, Theme} from '@material-ui/core/styles';
 import { Grid, Button, IconButton } from '@material-ui/core';
-import { CloudDownload, CloudUpload } from '@material-ui/icons/';
+import { CloudDownload, CloudUpload, GetApp } from '@material-ui/icons/';
 import { Layouts } from '../App'
 
 interface buttonInterface {
@@ -29,19 +29,26 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     passive: {
         color: '#00000061',
-        'border-bottom': 'solid 1px #00000061',
-        'min-height': '100%',
+        borderBottom: 'solid 1px #00000061',
+        minHeight: '100%',
     },
     active: {
         color: '#4791db',
-        'border-bottom': 'solid 2px #4791db',
-        'box-sizing': 'border-box',
+        textAlign: 'center',
+        borderBottom: 'solid 2px #4791db',
+        boxSizing: 'border-box',
     }
 }));
 
 
 const CustomTab = ({ onClickTab, slotNumber, selected }: buttonInterface) => {
   const classes = useStyles();
+
+  //TODO upload tacton data to hardware
+// function uploadTacton(slotNb: number, rawTacton: any) {
+//     if(rawTacton) ipcRenderer.send('sendingTacton', { slotNb: slotNb, rawData: rawTacton })
+//     else console.log("No tacton data to send to the device.")
+// }
 
   return (
       !selected ? (
@@ -59,12 +66,17 @@ const CustomTab = ({ onClickTab, slotNumber, selected }: buttonInterface) => {
                       Slot {slotNumber}
                   </Button>
               </Grid>
-              <Grid item>
+              <Grid item xs={1}>
+                  <IconButton aria-label="upload to device" className={classes.icon} onClick={() => { /*TODO*/ }}>
+                      <GetApp />
+                  </IconButton>
+              </Grid>
+              <Grid item xs={1}>
                 <IconButton aria-label="import" className={classes.icon} onClick={() => onClickTab(slotNumber, Layouts.ImportLayout)}>
                   <CloudDownload />
                 </IconButton>
               </Grid>
-              <Grid item>
+              <Grid item xs={1}>
                 <IconButton aria-label="save" className={classes.icon} onClick={() => onClickTab(slotNumber, Layouts.SaveLayout)}>
                   <CloudUpload />
                 </IconButton>

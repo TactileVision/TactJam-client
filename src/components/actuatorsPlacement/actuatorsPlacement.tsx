@@ -4,8 +4,7 @@ import { DirectionalLight } from "react-three-fiber/components";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Model from './avatar';
 import * as THREE from 'three';
-import { Grid, IconButton, RootRefProps } from "@material-ui/core";
-import { ControlCamera, PanTool, Save } from "@material-ui/icons";
+import { Grid, Button, RootRefProps } from "@material-ui/core";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import clsx from "clsx";
 import { TactonContext } from '../centralComponents/TactonContext';
@@ -189,7 +188,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     fixed: {
         position: 'absolute',
-        top: 15,
+        bottom: 65,
         right: 5,
         zIndex: 1
     },
@@ -231,12 +230,12 @@ export default function ActuatorPlacement() {
                 {/*    onClick={() => updateActuators(hardcodedPlacement)}>*/}
                 {/*    <Save/>*/}
                 {/*</IconButton>*/}
-                <IconButton
+                <Button
                     className={classes.fixed}
-                    aria-label="switch camera control"
+                    variant="outlined"
                     onClick={() => { enableControlCamera(!controlCamera) }} >
-                    {(() => controlCamera ? <ControlCamera /> : <PanTool />)()}
-                </IconButton>
+                    {(() => controlCamera ? "Switch to actuator control" : "Switch to camera control")()}
+                </Button>
                 <Canvas
                     camera={{ fov: 45, aspect: 1, near: 0.1, far: 100, position: [0, 2.5, 3.5]}}
                     className={clsx(classes.canvas, controlCamera ? classes.controlCamCursor : classes.controlActuatorsCursor)}

@@ -3,7 +3,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TimeProfile from '../timeProfile/timeProfile';
 import ActuatorPlacement from "@/components/actuatorsPlacement/actuatorsPlacement";
-import ConnectionPanel from "@/components/deviceConnection/connectionPanel";
+import ConnectionLine from "@/components/deviceConnection/connectionLine";
 import clsx from 'clsx';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -35,7 +35,7 @@ export default function MainLayout(props: { active: boolean }) {
                 <ActuatorPlacement />
             </Grid>
         </Grid>
-        <ConnectionPanel/>
+        <ConnectionLine/>
       </div>
   );
 }

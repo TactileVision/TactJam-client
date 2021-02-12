@@ -15,6 +15,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   svg: {
     width: '100%',
     height: '100%',
+    fontFamily: 'Roboto, sans-serif',
+    fontSize: '14'
   }
 }));
 
