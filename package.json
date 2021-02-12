@@ -2,6 +2,7 @@
   "name": "tactjam",
   "version": "1.0.0",
   "description": "TactJam GUI that enables communicating with a TactJam device as well as saving and loading tacton data from a server.",
+  "homepage": "https://github.com/TactileVision/TactJam-client/",
   "main": "build/main.js",
   "scripts": {
     "build": "webpack",
@@ -9,7 +10,9 @@
     "run": "electron build/main.js",
     "test": "electron src/test-main.js",
     "dist": "npm run build && electron-builder",
-    "compile": "electron-builder"
+    "compile:windows": "electron-builder --win --x64",
+    "compile:macos": "electron-builder --mac",
+    "compile:linux": "electron-builder --linux"
   },
   "keywords": [],
   "author": "",
@@ -62,5 +65,9 @@
       "target": ["AppImage", "tag.gz"],
       "executableName": "TactJam 1.0.0"
     }
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/TactileVision/TactJam-client/"
   }
 }
