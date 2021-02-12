@@ -56,7 +56,8 @@
     "files": [ "build/*", "build/webpack-assets/*" ],
     "mac": {
       "category": "public.app-category.graphics-design",
-      "target": ["dmg", "pkg"]
+      "target": ["dmg", "pkg"],
+      "icon": "build/icon.png"
     },
     "dmg": {
       "title": "TactJam 1.0.0"

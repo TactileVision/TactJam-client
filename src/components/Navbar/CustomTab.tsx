@@ -1,11 +1,7 @@
 import React from 'react';
 import {makeStyles, MuiThemeProvider, createMuiTheme, Theme} from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import SaveIcon from '@material-ui/icons/Save';
-import OpenInNewIcon from '@material-ui/icons/OpenInNew';
-import blue from '@material-ui/core/colors/blue';
+import { Grid, Button, IconButton } from '@material-ui/core';
+import { CloudDownload, CloudUpload } from '@material-ui/icons/';
 import { Layouts } from '../App'
 
 interface buttonInterface {
@@ -65,12 +61,12 @@ const CustomTab = ({ onClickTab, slotNumber, selected }: buttonInterface) => {
               </Grid>
               <Grid item>
                 <IconButton aria-label="import" className={classes.icon} onClick={() => onClickTab(slotNumber, Layouts.ImportLayout)}>
-                  <OpenInNewIcon />
+                  <CloudDownload />
                 </IconButton>
               </Grid>
               <Grid item>
                 <IconButton aria-label="save" className={classes.icon} onClick={() => onClickTab(slotNumber, Layouts.SaveLayout)}>
-                  <SaveIcon />
+                  <CloudUpload />
                 </IconButton>
               </Grid>
           </Grid>
