@@ -17,10 +17,10 @@ The TactJam GUI is based on [Node.js](https://nodejs.org/en/), [React](https://r
 
 ```
 > npm install
-> npm run build && electron build/main.js
+> npm start
 ```
 
-To compile the Electron app into an executable, we use the [electron-builder](https://www.electron.build/) package. You first need to build your sources using the above command, and then run `> electron-builder --win --x64` or `--mac` or `--linux` based on your OS.
+To compile the Electron app into an executable, we use the [electron-builder](https://www.electron.build/) package. You first need to build your sources using the above command, and then run `> npm run compile:windows` or `compile:mac` or `compile:linux` based on your OS.
 
 You might run into an error when starting the Electron app after building or compiling it that indicates a node module was compiled against another Node version. You would then need to install the Node module [electron-rebuild](https://github.com/electron/electron-rebuild) and run it inside the main folder to rebuild all the dependencies.
 
