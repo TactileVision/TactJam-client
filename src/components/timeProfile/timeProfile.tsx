@@ -30,7 +30,9 @@ export default function TimeProfile() {
   // });
 
   const formatDuration = (duration: number) => {
-    return Math.floor(duration/1000)+"."+(duration%1000)+"s"
+    let ms = (duration%1000)+""
+    ms = ms.substring(0, 2)
+    return Math.floor(duration/1000)+"."+ms+"s"
   }
 
   return (

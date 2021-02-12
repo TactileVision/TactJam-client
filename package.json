@@ -1,13 +1,15 @@
 {
   "name": "tactjam",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "TactJam GUI that enables communicating with a TactJam device as well as saving and loading tacton data from a server.",
+  "main": "build/main.js",
   "scripts": {
     "build": "webpack",
-    "start": "npm run build && electron dist/main.js",
-    "run": "electron dist/main.js",
-    "test": "electron src/test-main.js"
+    "start": "npm run build && electron build/main.js",
+    "run": "electron build/main.js",
+    "test": "electron src/test-main.js",
+    "dist": "npm run build && electron-builder",
+    "compile": "electron-builder"
   },
   "keywords": [],
   "author": "",
@@ -19,14 +21,14 @@
     "@types/react-dom": "^17.0.0",
     "@types/react-select": "^4.0.12",
     "electron": "^11.1.1",
-    "electron-rebuild": "^2.3.4",
     "html-webpack-plugin": "^4.5.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "ts-loader": "^8.0.13",
     "typescript": "^4.1.3",
     "webpack": "^5.11.1",
-    "webpack-cli": "^4.3.1"
+    "webpack-cli": "^4.3.1",
+    "electron-builder": "^22.9.1"
   },
   "dependencies": {
     "@material-ui/lab": "^4.0.0-alpha.57",
@@ -43,5 +45,14 @@
     "serialport": "^9.0.6",
     "three": "^0.124.0",
     "vtp.js": "^0.3.0"
+  },
+  "build": {
+    "appId": "TactJam.GUI",
+    "productName": "TactJam",
+    "copyright": "Copyright © 2021 Tactile Vision",
+    "files": [ "build/*", "build/webpack-assets/*" ],
+    "mac": {
+      "category": "your.app.category.type"
+    }
   }
 }
