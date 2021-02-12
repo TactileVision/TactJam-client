@@ -17,7 +17,7 @@ The TactJam GUI is based on [Node.js](https://nodejs.org/en/), [React](https://r
 
 ```
 > npm install
-> npm run build && electron dist/main.js
+> npm run build && electron build/main.js
 ```
 
 
