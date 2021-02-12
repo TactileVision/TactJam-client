@@ -48,6 +48,7 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
     }, [])
 
     const updateActuatorsPosition = (actuators: THREE.Vector3[]) => {
+        // console.log(actuators)
         setState({
             ...state,
             actuatorPositions: actuators

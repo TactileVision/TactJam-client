@@ -5,7 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Model from './avatar';
 import * as THREE from 'three';
 import { Grid, IconButton, RootRefProps } from "@material-ui/core";
-import { ControlCamera, PanTool } from "@material-ui/icons";
+import { ControlCamera, PanTool, Save } from "@material-ui/icons";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import clsx from "clsx";
 import { TactonContext } from '../centralComponents/TactonContext';
@@ -83,6 +83,7 @@ interface ActuatorControlsProps {
     setSelectedActuator: SetSelectedActuator,
     avatar: React.Ref<any>,
     controlCamera: boolean,
+    actuatorPositions: THREE.Vector3[],
     updatePositions: UpdatePositions
 }
 
@@ -101,6 +102,14 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
         });
     };
 
+    // check whether positions changed externally (e.g., loaded data from file)
+    const needUpdateFromLoadedData = () => {
+        let i = 0;
+        //@ts-ignore
+        while(i < actuators.length && actuators[i].current?.position.equals(props.actuatorPositions[i])) { i++; }
+        return i < actuators.length;
+    }
+
     let dummy = useRef(null);
 
     // instantiate the actuators right after the render of this component
@@ -108,19 +117,30 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
         for (let i = 0; i < actuators.length; i++) {
             //TODO fix types issues
             // @ts-ignore
-            actuators[i].current.position.set(initialPos[i][0], initialPos[i][1], initialPos[i][2]);
+            actuators[i].current?.position.set(initialPos[i][0], initialPos[i][1], initialPos[i][2]);
             // @ts-ignore
-            actuators[i].current.geometry.rotateX(Math.PI / 2);
+            // actuators[i].current?.geometry.rotateX(Math.PI / 2);
+            props.updatePositions(actuators.map<any>((el, i) => el.current ? el.current.position : null));
         }
     }, []);
 
     // update every frame ==> used to move actuators around
     useFrame((state) => {
         //TODO optimize number of updates
-        if (needUpdate) {
+        if (props.selectedActuator < 0 && needUpdate) {
             props.updatePositions(actuators.map<any>((el, i) => el.current ? el.current.position : null));
             needUpdate = false;
         }
+        
+        // if actuators positions changed externally (e.g., loading tacton file)
+        if(needUpdateFromLoadedData()) {
+            props.actuatorPositions.map((el, i) => {
+                //@ts-ignore
+                actuators[i].current?.position.set(el.x, el.y, el.z);
+            });
+            console.log(actuators.map((el, i) => el.current?.position))
+        }
+
         if (props.selectedActuator > -1 && !props.controlCamera) {
             //TODO deal with types
             // @ts-ignore
@@ -148,7 +168,7 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
 
     return (
         <group>
-            { createActuators()}
+            { createActuators() }
         </group>
     );
 }
@@ -186,49 +206,65 @@ export default function ActuatorPlacement() {
     const [actuators, setActuators] = useState(false);
     const [selectedActuator, setSelectedActuator] = useState(-1);
     const [controlCamera, enableControlCamera] = useState(true);
-    const { actuatorPositions, updateActuators } = useContext(TactonContext)
+    const { updateActuators } = useContext(TactonContext)
     let avatar: React.Ref<MeshProps> = useRef(null);
 
-    //let actuatorsPositions = new Array(8).fill(null).map(() => new THREE.Vector3(0, 0, 0));
-    const updateActuatorsPositions = (positions: THREE.Vector3[]) => {
-        //positions.forEach((el, i) => actuatorsPositions[i].copy(el));
-        updateActuators(positions);
-        // console.log(positions);
-    };
+    // for debug
+    // const hardcodedPlacement = [
+    //     new THREE.Vector3(-1, 0.25, 0),
+    //     new THREE.Vector3(-0.75, 0.25, 0),
+    //     new THREE.Vector3(-0.5, 0.25, 0),
+    //     new THREE.Vector3(-0.08686050975251715, 0.90062855226906, 0.048447720424552365),
+    //     new THREE.Vector3(0.14406614047031482, 0.6158786854739752, 0.02739282056493808),
+    //     new THREE.Vector3(0.01562139252133213, 1.0847422696372164, 0.06829405915292242),
+    //     new THREE.Vector3(0.31785135433143086, 1.4244107855635821, -0.0015909166814154219),
+    //     new THREE.Vector3(0.75, 0.25, 0),
+    // ]
 
     const classes = useStyles();
 
     return (
-        <Grid item className={classes.root} xs={12}>
-            <IconButton
-                className={classes.fixed}
-                aria-label="switch camera control"
-                onClick={() => { enableControlCamera(!controlCamera) }} >
-                {(() => controlCamera ? <ControlCamera /> : <PanTool />)()}
-            </IconButton>
-            <Canvas
-                camera={{ fov: 35, aspect: 1, near: 0.1, far: 100, position: [0, 0.8, 4] }}
-                className={clsx(classes.canvas, controlCamera ? classes.controlCamCursor : classes.controlActuatorsCursor)}
-                id="canvas3D"
-                onPointerUp={() => { setSelectedActuator(-1); console.log(actuatorPositions); }}>
-                <CameraControls enableControl={controlCamera} />
-                <ambientLight color={0xffffff} intensity={0.5} />
-                <Suspense fallback={null}>
-                    {/*TODO not sure what's happening here
-                    @ts-ignore */}
-                    <Model ref={avatar} setActuators={setActuators} />
-                    {(() => {
-                        if (actuators) return (
-                            <ActuatorControls
-                                selectedActuator={selectedActuator}
-                                setSelectedActuator={setSelectedActuator}
-                                avatar={avatar}
-                                controlCamera={controlCamera}
-                                updatePositions={updateActuatorsPositions} />
-                        );
-                    })()}
-                </Suspense>
-            </Canvas>
-        </Grid>
+        <TactonContext.Consumer>
+            { ({ actuatorPositions, updateActuators }) => (
+            <Grid item className={classes.root} xs={12}>
+                {/*<IconButton*/}
+                {/*    onClick={() => updateActuators(hardcodedPlacement)}>*/}
+                {/*    <Save/>*/}
+                {/*</IconButton>*/}
+                <IconButton
+                    className={classes.fixed}
+                    aria-label="switch camera control"
+                    onClick={() => { enableControlCamera(!controlCamera) }} >
+                    {(() => controlCamera ? <ControlCamera /> : <PanTool />)()}
+                </IconButton>
+                <Canvas
+                    camera={{ fov: 45, aspect: 1, near: 0.1, far: 100, position: [0, 2.5, 3.5]}}
+                    className={clsx(classes.canvas, controlCamera ? classes.controlCamCursor : classes.controlActuatorsCursor)}
+                    id="canvas3D"
+                    // onPointerUp={() => { setSelectedActuator(-1); console.log(actuatorPositions); }}>
+                    onPointerUp={() => setSelectedActuator(-1)}
+                    onMouseOut={() => setSelectedActuator(-1)}>
+                    <CameraControls enableControl={controlCamera} />
+                    <ambientLight color={0xffffff} intensity={0.5} />
+                    <Suspense fallback={null}>
+                        {/*TODO not sure what's happening here
+                        @ts-ignore */}
+                        <Model ref={avatar} setActuators={setActuators} />
+                        {(() => {
+                            if (actuators) return (
+                                <ActuatorControls
+                                    selectedActuator={selectedActuator}
+                                    setSelectedActuator={setSelectedActuator}
+                                    avatar={avatar}
+                                    controlCamera={controlCamera}
+                                    actuatorPositions={actuatorPositions}
+                                    updatePositions={updateActuators} />
+                            );
+                        })()}
+                    </Suspense>
+                </Canvas>
+            </Grid>
+            )}
+        </TactonContext.Consumer>
     );
 }

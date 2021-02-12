@@ -61,20 +61,22 @@ serialConnection.onDeviceConnect = (port: any) => {
   serialPort = port
   const parser = new Readline()
   serialPort.pipe(parser)
-  parser.on('data', (line: string) => {
-    // only listening to tacton's received for now
-    if(!line.startsWith("<tacton")) return
+  parser.on('data', (line: any) => {
+    console.log(typeof(line), line);
 
-    const tacton: {slotNb: number, rawData: string} = { slotNb: 0, rawData: null };
-    // get slot number to update
-    tacton.slotNb = +line.match(/"[1-3]"/)[0][1]
-    // get bytes string
-    const bytes = line.match(/>.*</)[0]
-    //TODO translate string into Byte array
-    tacton.rawData = bytes.substring(1, bytes.length-2)
-    console.log("Received tacton: ")
-    console.log(tacton)
-    mainWindow?.webContents.send('tactonReceived', tacton)
+    // only listening to tacton's received for now
+    // if(!line.startsWith("<tacton")) return
+    //
+    // const tacton: {slotNb: number, rawData: string} = { slotNb: 0, rawData: null };
+    // // get slot number to update
+    // tacton.slotNb = +line.match(/"[1-3]"/)[0][1]
+    // // get bytes string
+    // const bytes = line.match(/>.*</)[0]
+    // //TODO translate string into Byte array
+    // tacton.rawData = bytes.substring(1, bytes.length-2)
+    // console.log("Received tacton: ")
+    // console.log(tacton)
+    // mainWindow?.webContents.send('tactonReceived', tacton)
   })
 }
 

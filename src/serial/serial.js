@@ -1,5 +1,6 @@
 const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline')
+const Delimiter = require('@serialport/parser-delimiter')
 
 function SerialConnection() {
     let tactjamPort = null;
@@ -20,6 +21,10 @@ function SerialConnection() {
         // close previous instance
         const serialPort = new SerialPort(port, {
             baudRate: 9600,
+            databits: 8,
+            parity: 'none',
+            stopBits: 1,
+            flowControl: false,
             autoOpen: false
         });
         serialPorts[port] = serialPort;
@@ -32,13 +37,16 @@ function SerialConnection() {
                 return;
             }
             console.log("connected to port " + port);
-            const parser = new Readline();
+            // const parser = new Readline();
+            // console.log('buffer', Buffer.alloc(1, 0));
+            const parser = new Delimiter({ delimiter: '\n' });
             serialPort.pipe(parser);
 
             parser.on('data', (line) => {
-                //TODO check if message matches the "welcome" message
-                console.log('Received: ' + line);
-                if(line.trim() === "welcome") {
+                // console.log(typeof(line), line.buffer.slice(line.byteOffset, line.byteOffset + line.byteLength));
+                const msg = line.toString();
+                // welcome message = tactjam
+                if(msg.trim() === "tactjam") {
                     // console.log("yeah");
                     tactjamPort = serialPort;
                     connection.onDeviceConnect(tactjamPort);
