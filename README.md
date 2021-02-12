@@ -57,6 +57,6 @@ This might not be the world’s largest code base. However, a consistent code st
 
 ## Copyright
 
-TactJam-hardware is (C) 2020 Tactile Vision
+TactJam-client is (C) 2020 Tactile Vision
 
 It is licensed under the MIT license. For details, please refer to the [LICENSE](LICENSE) file.
