@@ -34,7 +34,7 @@ export default function TactonLayout(props: TactonLayoutProps) {
         <TactonProvider slotNb={props.slotNb}>
             <Grid item xs={12} hidden={!props.active}>
                 <MainLayout active={props.layout === Layouts.MainLayout} />
-                <ImportLayout active={props.layout === Layouts.ImportLayout} cancel={() => props.changeLayout(Layouts.MainLayout)} />
+                <ImportLayout active={props.layout === Layouts.ImportLayout} returnMainLayout={() => props.changeLayout(Layouts.MainLayout)} />
                 <SaveLayout active={props.layout === Layouts.SaveLayout} cancel={() => props.changeLayout(Layouts.MainLayout)} />
             </Grid>
         </TactonProvider>
