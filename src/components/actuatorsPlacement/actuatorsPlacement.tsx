@@ -183,8 +183,8 @@ const useStyles = makeStyles((theme: Theme) => ({
         position: "relative"
     },
     canvas: {
-        minHeight: 700,
-        maxHeight: 700
+        minHeight: 600,
+        maxHeight: 720
     },
     fixed: {
         position: 'absolute',

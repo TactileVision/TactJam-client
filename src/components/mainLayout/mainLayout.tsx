@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import TimeProfile from '../timeProfile/timeProfile';
 import ActuatorPlacement from "@/components/actuatorsPlacement/actuatorsPlacement";
 import ConnectionLine from "@/components/deviceConnection/connectionLine";
+import {InformContext, InformProvided} from '../centralComponents/InformContext'
 import clsx from 'clsx';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -14,28 +15,52 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     fullHeight: {
         'min-height': '100%',
-        maxHeight: 720,
+        maxHeight: 600,
     },
     hide: {
         display: 'none'
     }
 }));
 
-export default function MainLayout(props: { active: boolean }) {
-  const classes = useStyles();
+export default function MainLayout(props: { active: boolean, slotNb:number }) {
+    const classes = useStyles();
 
-  return (
-      // <div className={classes.root} hidden={!props.active}>
-      <div className={clsx(classes.root, !props.active ? classes.hide : '')}>
-        <Grid container spacing={0} className={classes.root}>
-            <Grid container item xs={6} className={classes.fullHeight}> {/*style={{ borderRightStyle: 'solid', borderColor: 'black', borderWidth: '1em' }}>*/}
-                <TimeProfile />
-            </Grid>
-            <Grid container item xs={6} className={classes.fullHeight}>
-                <ActuatorPlacement />
-            </Grid>
-        </Grid>
-        <ConnectionLine/>
-      </div>
-  );
+    const switchSaveLayoutError = (saveRequested: boolean[], informProvidList: InformProvided[]) => {
+        console.log('switchSaveLayoutError')
+        if (saveRequested[props.slotNb - 1]) {
+            const informProvid = informProvidList[props.slotNb - 1]
+            if (informProvid.patternProvided) {
+                if (!informProvid.positionProvided) {
+                    console.log('positionProvided false')
+                    return (<Grid item xs={12}>
+                        You have to place at least one motor.
+                    </Grid>)
+                }
+            } else {
+                console.log('Pattern false')
+                return (<Grid item xs={12}>
+                    We don't receive a Pattern.
+                </Grid>)
+            }
+        }
+    }
+
+    return (
+        <InformContext.Consumer>
+            {({ saveRequested, informProvidList }) => (
+                // <div className={classes.root} hidden={!props.active}>
+                <div className={clsx(classes.root, !props.active ? classes.hide : '')}>
+                    <Grid container spacing={0} className={classes.root}>
+                        <Grid container item xs={6} className={classes.fullHeight}> {/*style={{ borderRightStyle: 'solid', borderColor: 'black', borderWidth: '1em' }}>*/}
+                            <TimeProfile />
+                        </Grid>
+                        <Grid container item xs={6} className={classes.fullHeight}>
+                            <ActuatorPlacement />
+                        </Grid>
+                        {switchSaveLayoutError(saveRequested, informProvidList)}
+                    </Grid>
+                    <ConnectionLine />
+                </div>)}
+        </InformContext.Consumer>
+    );
 }

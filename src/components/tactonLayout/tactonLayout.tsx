@@ -6,6 +6,7 @@ import ImportLayout from "@/components/importLayout/importLayout";
 import SaveLayout from "@/components/saveLayout/saveLayout";
 import { Layouts } from "../App";
 import { TactonContext, TactonProvider } from '../centralComponents/TactonContext';
+import { InformContext, InformProvided } from '../centralComponents/InformContext';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -29,11 +30,10 @@ export default function TactonLayout(props: TactonLayoutProps) {
     const classes = useStyles();
 
     //TODO add callbacks to handle tacton data
-
     return (
         <TactonProvider slotNb={props.slotNb}>
             <Grid item xs={12} hidden={!props.active}>
-                <MainLayout active={props.layout === Layouts.MainLayout} />
+                <MainLayout active={props.layout === Layouts.MainLayout} slotNb={props.slotNb} />
                 <ImportLayout active={props.layout === Layouts.ImportLayout} returnMainLayout={() => props.changeLayout(Layouts.MainLayout)} />
                 <SaveLayout active={props.layout === Layouts.SaveLayout} cancel={() => props.changeLayout(Layouts.MainLayout)} />
             </Grid>
