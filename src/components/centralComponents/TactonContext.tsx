@@ -2,6 +2,7 @@ import React, { createContext, ReactNode, useContext, useRef, useState, useEffec
 import * as THREE from 'three';
 import { ipcRenderer } from 'electron';
 import tactons from '../timeProfile/hardcodedTactons';
+import { InformContext } from './InformContext';
 let VTP = require('vtp.js/dist/vtp.cjs');
 
 interface Position {
@@ -71,6 +72,8 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
         tactonMetadata: null,
     })
 
+    const { tactonReceived } = useContext(InformContext)
+
     useEffect(() => {
         setState({
             ...state,
@@ -79,7 +82,10 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
 
         ipcRenderer.on('tactonReceived', (event, tactonData) => {
             // update tacton information if this slot is the one targeted
-            if (tactonData.slotNb == props.slotNb) setState({ ...state, rawTacton: tactonData.rawData })
+            if (tactonData.slotNb == props.slotNb) {
+                tactonReceived(tactonData.slotNb)
+                setState({ ...state, rawTacton: tactonData.rawData })
+            }
         })
     }, [])
 
@@ -132,6 +138,8 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
                 positions.push(state.actuatorPositions[i])
             }
         }
+
+        tactonReceived(props.slotNb)
         setState({
             actuatorPositions: positions,
             rawTacton: buffer,
@@ -148,6 +156,7 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
         ]).buffer;
 
         const encodedTacton: tactonAttributes = encodeTacton(instructionWords)
+        tactonReceived(props.slotNb)
         setState({
             ...state,
             rawTacton: instructionWords,

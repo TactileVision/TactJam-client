@@ -61,7 +61,7 @@ const CustomTab = ({ onClickTab, slotNumber, selected }: buttonInterface) => {
           </Grid>
         ) : (
           <Grid container spacing={0} className={selected ? classes.active : classes.passive}>
-              <Grid item xs={9}>
+              <Grid item xs={8}>
                   <Button classes={{root: classes.button, disabled: classes.disabled}} fullWidth disabled onClick={() => onClickTab(slotNumber, Layouts.MainLayout)}>
                       Slot {slotNumber}
                   </Button>
@@ -81,6 +81,7 @@ const CustomTab = ({ onClickTab, slotNumber, selected }: buttonInterface) => {
                   <CloudUpload />
                 </IconButton>
               </Grid>
+              <Grid item xs={1}/>
           </Grid>
           )
   );

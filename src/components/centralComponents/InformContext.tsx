@@ -10,7 +10,8 @@ const InformContext = createContext<
     {
         saveRequested: boolean[]
         informProvidList: InformProvided[],
-        requestSave: (slotNumber: number) => void
+        requestSave: (slotNumber: number) => void,
+        tactonReceived: (slotNumber: number) => void
     }>(null);
 
 const InformProvider = (props: { children: ReactNode }) => {
@@ -26,7 +27,7 @@ const InformProvider = (props: { children: ReactNode }) => {
             initProvid.push({
                 slotNumber: i + 1,
                 patternProvided: false,
-                positionProvided: false,
+                positionProvided: true,
             })
 
         }
@@ -38,18 +39,42 @@ const InformProvider = (props: { children: ReactNode }) => {
 
     const requestSave = (slotNumber: number) => {
         const tempRequest = state.saveRequested;
-        tempRequest[slotNumber-1] = true
+        tempRequest[slotNumber - 1] = true
         setState({
             ...state,
-            saveRequested:tempRequest
+            saveRequested: tempRequest
         })
     }
+
+    const tactonReceived = (slotNumber: number) => {
+        if (!state.informProvidList[slotNumber - 1].patternProvided) {
+            const tempInform = state.informProvidList;
+            tempInform[slotNumber - 1].patternProvided = true
+            setState({
+                ...state,
+                informProvidList: tempInform
+            })
+        }
+    }
+
+    const actuatorPlaced = (slotNumber: number) => {
+        if (!state.informProvidList[slotNumber - 1].positionProvided) {
+            const tempInform = state.informProvidList;
+            tempInform[slotNumber - 1].positionProvided = true
+            setState({
+                ...state,
+                informProvidList: tempInform
+            })
+        }
+    }
+
     return (
         <InformContext.Provider value={
             {
                 saveRequested: state.saveRequested,
                 informProvidList: state.informProvidList,
-                requestSave: requestSave
+                requestSave: requestSave,
+                tactonReceived: tactonReceived
             }}>
             { props.children}
         </InformContext.Provider>
