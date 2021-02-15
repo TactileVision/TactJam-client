@@ -64,7 +64,7 @@ function SerialConnection() {
         // console.log("Available ports: " + ports.join(' ; '));
 
         if (ports.length === 0) {
-            console.log("No ports connected.");
+           // console.log("No ports connected.");
             // if no device connected => close all former connections
             const ports = Object.keys(serialPorts);
             if (ports.length > 0) ports.forEach(port => delete serialPorts[port]);

@@ -4,9 +4,9 @@ import Grid from '@material-ui/core/Grid';
 import TimeProfile from '../timeProfile/timeProfile';
 import ActuatorPlacement from "@/components/actuatorsPlacement/actuatorsPlacement";
 import ConnectionLine from "@/components/deviceConnection/connectionLine";
-import {InformContext, InformProvided} from '../centralComponents/InformContext'
+import { InformContext, InformProvided } from '../centralComponents/InformContext'
 import clsx from 'clsx';
-
+import CustomAlert from '../centralComponents/CustomAlert'
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
         // flexGrow: 1,
@@ -22,22 +22,22 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
 }));
 
-export default function MainLayout(props: { active: boolean, slotNb:number }) {
+export default function MainLayout(props: { active: boolean, slotNb: number, tactonSaved: boolean, cancelMessage: () => void }) {
     const classes = useStyles();
 
     const switchSaveLayoutError = (saveRequested: boolean[], informProvidList: InformProvided[]) => {
-        console.log('switchSaveLayoutError')
+       // console.log('switchSaveLayoutError')
         if (saveRequested[props.slotNb - 1]) {
             const informProvid = informProvidList[props.slotNb - 1]
             if (informProvid.patternProvided) {
                 if (!informProvid.positionProvided) {
-                    console.log('positionProvided false')
+                   // console.log('positionProvided false')
                     return (<Grid item xs={12}>
                         You have to place at least one motor.
                     </Grid>)
                 }
             } else {
-                console.log('Pattern false')
+               // console.log('Pattern false')
                 return (<Grid item xs={12}>
                     We don't receive a Pattern.
                 </Grid>)
@@ -56,6 +56,13 @@ export default function MainLayout(props: { active: boolean, slotNb:number }) {
                         </Grid>
                         <Grid container item xs={6} className={classes.fullHeight}>
                             <ActuatorPlacement />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <CustomAlert
+                                showAlert={props.tactonSaved}
+                                notifyParentCancel={() => props.cancelMessage()}
+                                message='save.success'
+                                severity='success' />
                         </Grid>
                         {switchSaveLayoutError(saveRequested, informProvidList)}
                     </Grid>

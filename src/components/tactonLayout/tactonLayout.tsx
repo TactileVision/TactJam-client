@@ -28,14 +28,22 @@ interface TactonLayoutProps {
 
 export default function TactonLayout(props: TactonLayoutProps) {
     const classes = useStyles();
+    const [tactonIsSaved, setTactonIsSaved] = React.useState(false)
+    const saveTacton = () => {
+        setTactonIsSaved(true)
+        props.changeLayout(Layouts.MainLayout)
+    }
 
+    const cancelMessage = () =>{
+        setTactonIsSaved(false)
+    }
     //TODO add callbacks to handle tacton data
     return (
         <TactonProvider slotNb={props.slotNb}>
             <Grid item xs={12} hidden={!props.active}>
-                <MainLayout active={props.layout === Layouts.MainLayout} slotNb={props.slotNb} />
+                <MainLayout active={props.layout === Layouts.MainLayout} slotNb={props.slotNb} tactonSaved={tactonIsSaved} cancelMessage={() =>  cancelMessage()}/>
                 <ImportLayout active={props.layout === Layouts.ImportLayout} returnMainLayout={() => props.changeLayout(Layouts.MainLayout)} />
-                <SaveLayout active={props.layout === Layouts.SaveLayout} cancel={() => props.changeLayout(Layouts.MainLayout)} />
+                <SaveLayout active={props.layout === Layouts.SaveLayout} returnToMainLayout={(tactonSaved) => saveTacton()} />
             </Grid>
         </TactonProvider>
     );

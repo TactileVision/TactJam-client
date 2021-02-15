@@ -14,6 +14,9 @@
         "login": {
             "forgetCredentials": "Forgot username or password?",
             "invalidCredentials": "Invalid combination of login and password"
+        },
+        "save":{
+            "success": "Your tacton is saved successfully"
         }
     }
 }

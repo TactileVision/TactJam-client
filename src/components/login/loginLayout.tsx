@@ -116,7 +116,7 @@ const LoginLayout = ({ t, onClickLogin, onClickRegisterPage }: loginInterface) =
     }
 
     return (
-        <Grid container justify="center" spacing={3} className={classes.root}>
+        <Grid container justify="center" spacing={0} className={classes.root}>
             <Grid item xs={2} />
             <Grid container item xs={8} justify="center" alignItems="center" spacing={3}>
                 <Grid item xs={12} className={classes.flexStyle}>

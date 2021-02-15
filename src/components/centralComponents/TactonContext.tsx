@@ -62,6 +62,7 @@ const TactonContext = createContext<
         tactonMetadata: Tacton,
         setTactonDemo: () => void,
         setTacton: (tacton: Tacton) => void,
+        setTactonMetadata: (tacton: Tacton) => void,
     }>(null);
 
 const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
@@ -120,6 +121,12 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
         return { duration: currentTime, actuators };
     }
 
+    const setTactonMetadata = (tacton: Tacton) => {
+        setState({
+            ...state,
+            tactonMetadata: tacton,
+        })
+    }
     const setTacton = (tacton: Tacton) => {
         console.log("maybe crash if encode Tacton works correct")
         //encode the tactonPattern from the server
@@ -175,6 +182,7 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
                 tactonMetadata: state.tactonMetadata,
                 setTactonDemo: setNewTactonDemo,
                 setTacton: setTacton,
+                setTactonMetadata:setTactonMetadata
             }}>
             { props.children}
         </TactonContext.Provider>

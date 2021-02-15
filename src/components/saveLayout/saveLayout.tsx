@@ -34,7 +34,7 @@ enum TagKind {
 interface SaveLayoutProps {
     t: any
     active: boolean,
-    cancel: () => void
+    returnToMainLayout: (tactonSaved:boolean) => void
 }
 
 interface Selector {
@@ -59,7 +59,7 @@ const SaveLayout = (props: SaveLayoutProps) => {
         value: [] as Selector[],
         selectOptions: [] as Selector[]
     });
-    const { actuatorPositions, rawTacton } = useContext(TactonContext)
+    const { actuatorPositions, rawTacton, setTactonMetadata } = useContext(TactonContext)
 
     async function getCustomTag() {
         const res = await axios.get('tags')
@@ -110,16 +110,23 @@ const SaveLayout = (props: SaveLayoutProps) => {
             serverBodyTag.push({ name: selectBodyTag.value[i].label })
         }
 
-        const res = await axios.post('tactons/combined', {
+        await axios.post('tactons/combined', {
             title: title,
             description: description,
             libvtp: hexString,
             positions: actuatorPositions,
             tags: serverCustomTag,
             bodyTags: serverBodyTag
+        }).then((response) => {
+            setTactonMetadata(response.data)
+            props.returnToMainLayout(true)
         })
-        console.log(res.data)
+            .catch((error) => {
+                console.log("something go wrong");
+                console.log(error)
+            });
     }
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (validateForm()) {
@@ -278,7 +285,7 @@ const SaveLayout = (props: SaveLayoutProps) => {
                             </Button>
                             <Button variant="contained"
                                 className={classes.button}
-                                onClick={() => props.cancel()}>
+                                onClick={() => props.returnToMainLayout(false)}>
                                 Cancel
                             </Button>
                         </div>
