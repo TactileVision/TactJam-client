@@ -37,7 +37,7 @@ class ActuatorTimeProfile extends React.Component<PlotCharacteristics> {
         const data = this.props.data;
         if(data === null || data.length === 0) return;
 
-        console.log(this.props.id, data);
+        // console.log(this.props.id, data);
 
         this.xScale.domain([0, this.props.duration]);
 

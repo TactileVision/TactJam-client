@@ -4,7 +4,8 @@ import { DirectionalLight } from "react-three-fiber/components";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Model from './avatar';
 import * as THREE from 'three';
-import { Grid, Button, RootRefProps } from "@material-ui/core";
+import { Grid, Button, RootRefProps, IconButton } from "@material-ui/core";
+import { Save } from "@material-ui/icons";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import clsx from "clsx";
 import { TactonContext } from '../centralComponents/TactonContext';
@@ -76,14 +77,15 @@ const Actuator = React.forwardRef((props: ActuatorProps, ref: React.Ref<any>) =>
 });
 
 
-interface UpdatePositions { (positions: THREE.Vector3[]): void; }
 interface ActuatorControlsProps {
     selectedActuator: number,
     setSelectedActuator: SetSelectedActuator,
     avatar: React.Ref<any>,
     controlCamera: boolean,
     actuatorPositions: THREE.Vector3[],
-    updatePositions: UpdatePositions
+    updatePositions: (positions: THREE.Vector3[]) => void
+    updateFromServer: boolean,
+    needUpdateFromServer: (update: boolean) => void
 }
 
 const ActuatorControls = (props: ActuatorControlsProps) => {
@@ -100,14 +102,6 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
             return <Actuator ref={actuators[i]} key={"actuator" + i} color={colors[i]} id={i} setSelectedActuator={props.setSelectedActuator} />
         });
     };
-
-    // check whether positions changed externally (e.g., loaded data from file)
-    const needUpdateFromLoadedData = () => {
-        let i = 0;
-        //@ts-ignore
-        while(i < actuators.length && actuators[i].current?.position.equals(props.actuatorPositions[i])) { i++; }
-        return i < actuators.length;
-    }
 
     let dummy = useRef(null);
 
@@ -132,12 +126,14 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
         }
         
         // if actuators positions changed externally (e.g., loading tacton file)
-        if(needUpdateFromLoadedData()) {
+        if(props.updateFromServer) {
+            // console.log('updating positions')
             props.actuatorPositions.map((el, i) => {
                 //@ts-ignore
                 actuators[i].current?.position.set(el.x, el.y, el.z);
             });
-            console.log(actuators.map((el, i) => el.current?.position))
+            // console.log(actuators.map((el, i) => el.current?.position))
+            props.needUpdateFromServer(false);
         }
 
         if (props.selectedActuator > -1 && !props.controlCamera) {
@@ -188,7 +184,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     fixed: {
         position: 'absolute',
-        bottom: 65,
+        bottom: 15,
         right: 5,
         zIndex: 1
     },
@@ -207,28 +203,12 @@ export default function ActuatorPlacement() {
     const [controlCamera, enableControlCamera] = useState(true);
     let avatar: React.Ref<MeshProps> = useRef(null);
 
-    // for debug
-    // const hardcodedPlacement = [
-    //     new THREE.Vector3(-1, 0.25, 0),
-    //     new THREE.Vector3(-0.75, 0.25, 0),
-    //     new THREE.Vector3(-0.5, 0.25, 0),
-    //     new THREE.Vector3(-0.08686050975251715, 0.90062855226906, 0.048447720424552365),
-    //     new THREE.Vector3(0.14406614047031482, 0.6158786854739752, 0.02739282056493808),
-    //     new THREE.Vector3(0.01562139252133213, 1.0847422696372164, 0.06829405915292242),
-    //     new THREE.Vector3(0.31785135433143086, 1.4244107855635821, -0.0015909166814154219),
-    //     new THREE.Vector3(0.75, 0.25, 0),
-    // ]
-
     const classes = useStyles();
 
     return (
         <TactonContext.Consumer>
-            { ({ actuatorPositions, updateActuators }) => (
+            { ({ actuatorPositions, updateActuators, updateFromServer, needUpdateFromServer}) => (
             <Grid item className={classes.root} xs={12}>
-                {/*<IconButton*/}
-                {/*    onClick={() => updateActuators(hardcodedPlacement)}>*/}
-                {/*    <Save/>*/}
-                {/*</IconButton>*/}
                 <Button
                     className={classes.fixed}
                     variant="outlined"
@@ -256,6 +236,8 @@ export default function ActuatorPlacement() {
                                     avatar={avatar}
                                     controlCamera={controlCamera}
                                     actuatorPositions={actuatorPositions}
+                                    updateFromServer={updateFromServer}
+                                    needUpdateFromServer={needUpdateFromServer}
                                     updatePositions={updateActuators} />
                             );
                         })()}
