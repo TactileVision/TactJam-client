@@ -48,8 +48,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const LoginLayout = ({ t, onClickLogin, onClickRegisterPage }: loginInterface) => {
     const classes = useStyles();
-    const [username, setUsername] = React.useState('username123456');
-    const [password, setPassword] = React.useState('password');
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
     const [errorForm, setErrorForm] = React.useState({
         required: {
             username: false,

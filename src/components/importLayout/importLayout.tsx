@@ -95,8 +95,8 @@ const ImportLayout = (props: ImportLayoutProps) => {
     };
 
     const importClicked = (tacton: Tacton) => {
-        console.log('iclicked')
-        console.log(tacton);
+       // console.log('iclicked')
+       // console.log(tacton);
         setTacton(tacton);
         props.returnMainLayout();
     };
@@ -115,30 +115,6 @@ const ImportLayout = (props: ImportLayoutProps) => {
     return (
         // <Grid container spacing={3} hidden={!props.active}>
         <Grid container className={!props.active ? classes.hide : classes.root}>
-            <Grid container justify="center">
-                <Grid item xs={6}>
-                    <FormControl className={classes.formControl} fullWidth={true}>
-                        <InputLabel id="tags">Select your Tags</InputLabel>
-                        <Select
-                            labelId="tags"
-                            id="tags"
-                            multiple
-                            value={personName}
-                            onChange={handleChange}
-                            input={<Input />}
-                            renderValue={(selected) => (selected as string[]).join(', ')}
-                            MenuProps={MenuProps}
-                        >
-                            {names.map((name) => (
-                                <MenuItem key={name} value={name}>
-                                    <Checkbox checked={personName.indexOf(name) > -1} />
-                                    <ListItemText primary={name} />
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-            </Grid>
             <Grid container>
                 <Grid item xs={12}>
                     <List className={classes.listLeft}>
@@ -148,7 +124,7 @@ const ImportLayout = (props: ImportLayoutProps) => {
                     </List>
                 </Grid>
             </Grid>
-            <Grid item container xs={12} justify="center" alignContent="center" style={{ marginTop: 60 }}>
+            <Grid item container xs={12} justify="center" alignContent="center" style={{ marginBottom: 10 }}>
                 <Grid item>
                     <Button variant="contained"
                         onClick={() => props.returnMainLayout()}>

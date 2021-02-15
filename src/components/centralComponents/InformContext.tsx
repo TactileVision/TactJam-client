@@ -26,7 +26,7 @@ const InformProvider = (props: { children: ReactNode }) => {
         for (let i = 0; i < 3; i++) {
             initProvid.push({
                 slotNumber: i + 1,
-                patternProvided: false,
+                patternProvided: true,
                 positionProvided: true,
             })
 
