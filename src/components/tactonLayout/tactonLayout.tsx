@@ -42,8 +42,8 @@ export default function TactonLayout(props: TactonLayoutProps) {
         <TactonProvider slotNb={props.slotNb}>
             <Grid item xs={12} hidden={!props.active}>
                 <MainLayout active={props.layout === Layouts.MainLayout} slotNb={props.slotNb} tactonSaved={tactonIsSaved} cancelMessage={() =>  cancelMessage()}/>
-                <ImportLayout active={props.layout === Layouts.ImportLayout} returnMainLayout={() => props.changeLayout(Layouts.MainLayout)} />
-                <SaveLayout active={props.layout === Layouts.SaveLayout} returnToMainLayout={(tactonSaved) => saveTacton()} />
+                {props.layout === Layouts.ImportLayout && <ImportLayout returnMainLayout={() => props.changeLayout(Layouts.MainLayout)} />}
+                {props.layout === Layouts.SaveLayout && <SaveLayout returnToMainLayout={(tactonSaved) => saveTacton()} />}
             </Grid>
         </TactonProvider>
     );

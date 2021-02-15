@@ -33,9 +33,6 @@ const useStyles = makeStyles((theme: Theme) =>
         noLabel: {
             marginTop: theme.spacing(3),
         },
-        hide: {
-            display: 'none'
-        },
         listLeft: {
             marginLeft: '10px'
         },
@@ -45,32 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
-
-const names = [
-    'Oliver Hansen',
-    'Van Henry',
-    'April Tucker',
-    'Ralph Hubbard',
-    'Omar Alexander',
-    'Carlos Abbott',
-    'Miriam Wagner',
-    'Bradley Wilkerson',
-    'Virginia Andrews',
-    'Kelly Snyder',
-];
-
 interface ImportLayoutProps {
-    active: boolean,
     returnMainLayout: () => void,
 }
 
@@ -114,7 +86,7 @@ const ImportLayout = (props: ImportLayoutProps) => {
     }
     return (
         // <Grid container spacing={3} hidden={!props.active}>
-        <Grid container className={!props.active ? classes.hide : classes.root}>
+        <Grid container className={classes.root}>
             <Grid container>
                 <Grid item xs={12}>
                     <List className={classes.listLeft}>

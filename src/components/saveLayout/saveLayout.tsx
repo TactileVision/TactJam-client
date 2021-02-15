@@ -20,9 +20,6 @@ const useStyles = makeStyles((theme) => ({
     },
     formElement: {
         margin: '15px 0',
-    },
-    hide: {
-        display: 'none'
     }
 }));
 
@@ -33,7 +30,6 @@ enum TagKind {
 
 interface SaveLayoutProps {
     t: any
-    active: boolean,
     returnToMainLayout: (tactonSaved:boolean) => void
 }
 
@@ -238,7 +234,7 @@ const SaveLayout = (props: SaveLayoutProps) => {
     }
     return (
         // <Grid container justify="center" spacing={3} hidden={!props.active}>
-        <Grid container justify="center" spacing={0} className={!props.active ? classes.hide : ''}>
+        <Grid container justify="center" spacing={0}>
             <Grid item xs={2} />
             <Grid item xs={8}>
                 <form onSubmit={handleSubmit}>
