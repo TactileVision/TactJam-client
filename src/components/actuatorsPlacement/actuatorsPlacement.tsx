@@ -183,8 +183,8 @@ const useStyles = makeStyles((theme: Theme) => ({
         position: "relative"
     },
     canvas: {
-        minHeight: 700,
-        maxHeight: 700
+        minHeight: 600,
+        maxHeight: 720
     },
     fixed: {
         position: 'absolute',
@@ -205,7 +205,6 @@ export default function ActuatorPlacement() {
     const [actuators, setActuators] = useState(false);
     const [selectedActuator, setSelectedActuator] = useState(-1);
     const [controlCamera, enableControlCamera] = useState(true);
-    const { updateActuators } = useContext(TactonContext)
     let avatar: React.Ref<MeshProps> = useRef(null);
 
     // for debug

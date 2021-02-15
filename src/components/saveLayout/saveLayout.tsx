@@ -1,43 +1,22 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import SelectTwo from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Checkbox from '@material-ui/core/Checkbox';
-import ListItemText from '@material-ui/core/ListItemText';
 import Button from '@material-ui/core/Button';
-import Select from 'react-select'
+import { withTranslation } from 'react-i18next';
 import axios from 'axios'
 import CreatableSelect from 'react-select/creatable';
-
-const names = [
-    'Oliver Hansen',
-    'Van Henry',
-    'April Tucker',
-    'Ralph Hubbard',
-    'Omar Alexander',
-    'Carlos Abbott',
-    'Miriam Wagner',
-    'Bradley Wilkerson',
-    'Virginia Andrews',
-    'Kelly Snyder',
-];
+import { TactonContext } from '../centralComponents/TactonContext';
 
 const useStyles = makeStyles((theme) => ({
-    formControl: {
-        margin: theme.spacing(3),
-    },
-    button: {
-        margin: theme.spacing(1, 1, 0, 0),
-    },
     buttonContainer: {
         display: 'flex',
         justifyContent: 'center',
         marginTop: 60
+    },
+    button: {
+        margin: theme.spacing(1, 1, 0, 0),
     },
     formElement: {
         margin: '15px 0',
@@ -47,51 +26,40 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
-
+enum TagKind {
+    CustomTag,
+    BodyTag,
+}
 
 interface SaveLayoutProps {
+    t: any
     active: boolean,
     cancel: () => void
 }
 
-export interface Selector {
+interface Selector {
     value: string,
     label: string,
 }
-
-
-export interface Tag {
-    value: string,
-    isNew: false
-}
-
-export type TagsList = Tag[]
 
 const SaveLayout = (props: SaveLayoutProps) => {
     const classes = useStyles();
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
-    const [bodyParts, setBodyParts] = React.useState<string[]>([]);
-    const [error, setError] = React.useState(false);
+    const [errorForm, setErrorForm] = React.useState({
+        requiredTitle: false
+    });
     const [selectCustomTag, setSelectCustomTag] = React.useState({
         inputValue: '',
         value: [] as Selector[],
         selectOptions: [] as Selector[],
     });
     const [selectBodyTag, setSelectBodyTag] = React.useState({
-        selectOptions: [],
-        tagsSelected: []
+        inputValue: '',
+        value: [] as Selector[],
+        selectOptions: [] as Selector[]
     });
+    const { actuatorPositions, rawTacton } = useContext(TactonContext)
 
     async function getCustomTag() {
         const res = await axios.get('tags')
@@ -118,9 +86,45 @@ const SaveLayout = (props: SaveLayoutProps) => {
         getBodyTag()
     }, [])
 
+    const validateForm = () => {
+        let titleEmpty: boolean = (title === '');
+        if (titleEmpty != errorForm.requiredTitle) {
+            setErrorForm({
+                requiredTitle: titleEmpty
+            })
+        }
+        return (!titleEmpty);
+    }
+    const buf2hex = (buffer: ArrayBufferLike) => {
+        return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
+    }
+
+    async function postTacton() {
+        const hexString = buf2hex(rawTacton);
+        const serverCustomTag: { name: string }[] = []
+        const serverBodyTag: { name: string }[] = []
+        for (let i = 0; i < selectCustomTag.value.length; i++) {
+            serverCustomTag.push({ name: selectCustomTag.value[i].label })
+        }
+        for (let i = 0; i < selectBodyTag.value.length; i++) {
+            serverBodyTag.push({ name: selectBodyTag.value[i].label })
+        }
+
+        const res = await axios.post('tactons/combined', {
+            title: title,
+            description: description,
+            libvtp: hexString,
+            positions: actuatorPositions,
+            tags: serverCustomTag,
+            bodyTags: serverBodyTag
+        })
+        console.log(res.data)
+    }
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setError(true);
+        if (validateForm()) {
+            postTacton()
+        }
     };
 
     const checkGoodString = (input: string): boolean => {
@@ -175,42 +179,59 @@ const SaveLayout = (props: SaveLayoutProps) => {
         return tagArray;
     }
     //set the values in the select box
-    const handleChangeCustomTag = (inputValue: any, actionMeta: any) => {
+    const changeTag = (inputValue: any, actionMeta: any, kindOfTag: TagKind) => {
         //new item selected
         if (actionMeta.action == 'create-option') {
             const lastItem: Selector = inputValue[inputValue.length - 1];
             //check if string is valid
             if (checkGoodString(lastItem.label)) {
                 const newTags = createNewTags(lastItem.label);
-                const tempOne: Selector[] = selectCustomTag.value.concat(newTags)
-                const tempTwo: Selector[] = selectCustomTag.selectOptions.concat(newTags)
+                if (kindOfTag === TagKind.CustomTag) {
+                    const tempOne: Selector[] = selectCustomTag.value.concat(newTags)
+                    const tempTwo: Selector[] = selectCustomTag.selectOptions.concat(newTags)
+                    setSelectCustomTag({
+                        ...selectCustomTag,
+                        inputValue: '',
+                        value: tempOne,
+                        selectOptions: tempTwo
+                    });
+                }
+                if (kindOfTag === TagKind.BodyTag) {
+                    const tempOne: Selector[] = selectBodyTag.value.concat(newTags)
+                    const tempTwo: Selector[] = selectBodyTag.selectOptions.concat(newTags)
+                    setSelectBodyTag({
+                        ...selectBodyTag,
+                        inputValue: '',
+                        value: tempOne,
+                        selectOptions: tempTwo
+                    });
+                }
+            }
+        } else {
+            if (kindOfTag === TagKind.CustomTag)
                 setSelectCustomTag({
                     ...selectCustomTag,
                     inputValue: '',
-                    value: tempOne,
-                    selectOptions: tempTwo
+                    value: inputValue
                 });
-            }
-        } else {
-            setSelectCustomTag({
-                ...selectCustomTag,
-                inputValue: '',
-                value: inputValue
-            });
+            if (kindOfTag === TagKind.BodyTag)
+                setSelectBodyTag({
+                    ...selectBodyTag,
+                    inputValue: '',
+                    value: inputValue
+                })
         }
     }
 
-    const handleChangeBodyTag = (e: any) => {
-        setSelectBodyTag({
-            ...selectBodyTag,
-            tagsSelected: e
-        })
-    };
-
-
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.id === 'title')
+            setTitle(event.target.value);
+        if (event.target.id === 'description')
+            setDescription(event.target.value);
+    }
     return (
         // <Grid container justify="center" spacing={3} hidden={!props.active}>
-        <Grid container justify="center" spacing={3} className={!props.active ? classes.hide : ''}>
+        <Grid container justify="center" spacing={0} className={!props.active ? classes.hide : ''}>
             <Grid item xs={2} />
             <Grid item xs={8}>
                 <form onSubmit={handleSubmit}>
@@ -219,8 +240,9 @@ const SaveLayout = (props: SaveLayoutProps) => {
                             id="title"
                             label="Title"
                             value={title}
-                            helperText="This field is required"
-                            error={error}
+                            onChange={handleChange}
+                            helperText={errorForm.requiredTitle ? props.t('other.fieldRequired') : ''}
+                            error={errorForm.requiredTitle}
                             className={classes.formElement}
                         />
                         <TextField
@@ -229,8 +251,7 @@ const SaveLayout = (props: SaveLayoutProps) => {
                             rows={4}
                             label="Description"
                             value={description}
-                            helperText="This field is required"
-                            error={error}
+                            onChange={handleChange}
                             className={classes.formElement}
                         />
                         <FormControl className={classes.formElement}>
@@ -238,15 +259,16 @@ const SaveLayout = (props: SaveLayoutProps) => {
                                 id='customTags'
                                 isMulti
                                 value={selectCustomTag.value}
-                                onChange={handleChangeCustomTag}
+                                onChange={(value: any, action: any) => changeTag(value, action, TagKind.CustomTag)}
                                 options={selectCustomTag.selectOptions} />
                         </FormControl>
                         <FormControl
                             className={classes.formElement}>
-                            <Select
+                            <CreatableSelect
                                 id='bodyTags'
                                 isMulti
-                                onChange={handleChangeBodyTag}
+                                value={selectBodyTag.value}
+                                onChange={(value: any, action: any) => changeTag(value, action, TagKind.BodyTag)}
                                 options={selectBodyTag.selectOptions} />
                         </FormControl>
                         <div className={classes.buttonContainer}>
@@ -267,4 +289,4 @@ const SaveLayout = (props: SaveLayoutProps) => {
         </Grid >
     );
 }
-export default SaveLayout;
+export default withTranslation()(SaveLayout);

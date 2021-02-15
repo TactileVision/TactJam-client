@@ -5,6 +5,7 @@ let mainWindow: Electron.BrowserWindow | null;
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1280,
+    //height: 800,
     height: 720,
     // frame:false,
     webPreferences: {

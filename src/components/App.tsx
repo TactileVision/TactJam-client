@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import MainLayout from './mainLayout/mainLayout'
@@ -8,6 +8,7 @@ import CustomTab from './Navbar/CustomTab';
 import RegisterLayout from './login/registerLayout';
 import LoginLayout from './login/loginLayout';
 import TactonLayout from './tactonLayout/tactonLayout';
+import { InformContext } from './centralComponents/InformContext';
 
 export enum Layouts {
   MainLayout,
@@ -19,8 +20,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     // flexGrow: 1,
     width: '100%',
-    height: '100vh',
-    overflow: 'hidden'
+    //height: '100vh',
+    overflow: 'inherit'
   },
   tabs: {
     height: 50,
@@ -35,11 +36,23 @@ export default function NavTabs() {
   const [userHaveAccount, setUserHaveAccount] = React.useState(true);
   const [activeSlot, setActiveSlot] = React.useState(1);
   const [currentLayout, setCurrentLayout] = React.useState(Layouts.MainLayout);
+  const { informProvidList, requestSave, saveRequested } = useContext(InformContext)
 
   const handleChange = (slotNumber: number, layout: Layouts) => {
     console.log(layout);
-    setActiveSlot(slotNumber);
-    setCurrentLayout(layout)
+    console.log(informProvidList)
+    if (layout == Layouts.SaveLayout) {
+      if (informProvidList[slotNumber - 1].patternProvided && informProvidList[slotNumber - 1].positionProvided) {
+        setActiveSlot(slotNumber);
+        setCurrentLayout(layout)
+      } else {
+        if (!saveRequested[slotNumber - 1])
+          requestSave(slotNumber)
+      }
+    } else {
+      setActiveSlot(slotNumber);
+      setCurrentLayout(layout)
+    }
   };
 
   const tryLogin = () => {
@@ -74,7 +87,7 @@ export default function NavTabs() {
 
   return userLoggedIn ? (
     <Grid container spacing={0} className={classes.root}>
-      { createTabs() }
+      { createTabs()}
       <TactonLayout slotNb={1} layout={currentLayout} active={activeSlot === 1} changeLayout={(layout: Layouts) => handleChange(1, layout)} />
       <TactonLayout slotNb={2} layout={currentLayout} active={activeSlot === 2} changeLayout={(layout: Layouts) => handleChange(2, layout)} />
       <TactonLayout slotNb={3} layout={currentLayout} active={activeSlot === 3} changeLayout={(layout: Layouts) => handleChange(3, layout)} />
