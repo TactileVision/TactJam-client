@@ -11,7 +11,7 @@
     "test": "electron src/test-main.js",
     "dist": "npm run build && electron-builder",
     "compile:windows": "electron-builder --win --x64",
-    "compile:macos": "electron-builder --mac",               
+    "compile:macos": "electron-builder --mac",
     "compile:linux": "electron-builder --linux"
   },
   "keywords": [],

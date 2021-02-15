@@ -67,7 +67,7 @@ const CustomTab = ({ onClickTab, slotNumber, selected }: buttonInterface) => {
                   </Button>
               </Grid>
               <Grid item xs={1}>
-                  <IconButton aria-label="upload to device" className={classes.icon} onClick={() => { /*TODO*/ }}>
+                  <IconButton aria-label="upload to device" className={classes.icon} disabled onClick={() => { /*TODO*/ }}>
                       <GetApp />
                   </IconButton>
               </Grid>

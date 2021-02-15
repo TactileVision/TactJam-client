@@ -57,6 +57,8 @@ const TactonContext = createContext<
         slotNb: number,
         actuatorPositions: THREE.Vector3[],
         updateActuators: (actuators: THREE.Vector3[]) => void,
+        updateFromServer: boolean,
+        needUpdateFromServer: (update: boolean) => void,
         rawTacton: ArrayBufferLike,
         encodedTacton: tactonAttributes,
         tactonMetadata: Tacton,
@@ -66,6 +68,7 @@ const TactonContext = createContext<
 
 const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
     const [state, setState] = useState({
+        updateFromServer: false,
         actuatorPositions: [] as THREE.Vector3[],
         rawTacton: null,
         encodedTacton: null,
@@ -90,11 +93,20 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
     }, [])
 
     const updateActuatorsPosition = (actuators: THREE.Vector3[]) => {
-        console.log('updateActuatorsPosition')
-        console.log(actuators)
+        // console.log('updateActuatorsPosition')
+        // console.log(actuators)
         setState({
             ...state,
             actuatorPositions: actuators
+        })
+    }
+
+    const needUpdateFromServer = (update: boolean) => {
+        console.log(state.actuatorPositions)
+        console.log("need update: " + update)
+        setState({
+            ...state,
+            updateFromServer: update
         })
     }
 
@@ -141,6 +153,7 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
 
         tactonReceived(props.slotNb)
         setState({
+            updateFromServer: true,
             actuatorPositions: positions,
             rawTacton: buffer,
             encodedTacton: encodedTacton,
@@ -170,6 +183,8 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
                 slotNb: props.slotNb,
                 actuatorPositions: state.actuatorPositions,
                 updateActuators: updateActuatorsPosition,
+                updateFromServer: state.updateFromServer,
+                needUpdateFromServer: needUpdateFromServer,
                 rawTacton: state.rawTacton,
                 encodedTacton: state.encodedTacton,
                 tactonMetadata: state.tactonMetadata,
