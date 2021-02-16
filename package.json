@@ -9,9 +9,9 @@
     "start": "npm run build && electron build/main.js",
     "run": "electron build/main.js",
     "test": "electron src/test-main.js",
-    "dist": "npm run build && electron-builder",
+    "dist": "npm run build && electron-builder -c.mac.identity=null",
     "compile:windows": "electron-builder --win --x64",
-    "compile:macos": "electron-builder --mac",
+    "compile:macos": "electron-builder --mac -c.mac.identity=null",
     "compile:linux": "electron-builder --linux"
   },
   "keywords": [],
