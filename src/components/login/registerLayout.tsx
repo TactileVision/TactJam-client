@@ -113,7 +113,7 @@ const RegisterLayout = ({ t, onClickRegister, onClickLoginPage }: registerInterf
                 }
             }
         }
-        if (password.length < 8 || password.length > 128) {
+        if (password.length < 4 || password.length > 128) {
             returnValue = false;
             tempError = {
                 ...tempError,
