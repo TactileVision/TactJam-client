@@ -69,10 +69,10 @@ const ImportCard = ({ tacton, onClickImport }: ImportCardInterface) => {
     };
 
     const shortDescription = (description: string) => {
-        let temp = description.substring(0, 79)
-        if (temp.length > 45) {
-            const firstPart = temp.substring(0, 40);
-            const secondPart = temp.substring(40, temp.length);
+        let temp = description.substring(0, 100)
+        if (temp.length > 50) {
+            const firstPart = temp.substring(0, 50);
+            const secondPart = temp.substring(50, temp.length);
             temp = firstPart + ' ' + secondPart;
         }
         return temp
@@ -86,13 +86,13 @@ const ImportCard = ({ tacton, onClickImport }: ImportCardInterface) => {
                 <Accordion expanded={expanded} onChange={handleChange()}>
                     <AccordionSummary
                         style={{ padding: 0 }}
-                        expandIcon={(tacton.description.length > 79 || tacton?.tags?.length > 4 || tacton?.bodytags?.length > 4) && <ExpandMoreIcon />}
+                        expandIcon={(tacton.description.length > 100 || tacton?.tags?.length > 4 || tacton?.bodytags?.length > 4) && <ExpandMoreIcon />}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                     >
                         <Typography className={classes.heading}>Description</Typography>
                         {!expanded && <Typography>{
-                            shortDescription(tacton.description)} {tacton.description.length > 79 ? '...' : ''}</Typography>}
+                            shortDescription(tacton.description)} {tacton.description.length > 100 ? '...' : ''}</Typography>}
                     </AccordionSummary>
                     <AccordionDetails>
                         <Typography>

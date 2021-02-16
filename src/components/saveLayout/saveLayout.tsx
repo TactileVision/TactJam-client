@@ -120,6 +120,7 @@ const SaveLayout = (props: SaveLayoutProps) => {
             .catch((error) => {
                 console.log("something go wrong");
                 console.log(error)
+                console.log(error.data)
             });
     }
 
