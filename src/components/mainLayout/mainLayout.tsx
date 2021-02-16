@@ -51,10 +51,10 @@ export default function MainLayout(props: { active: boolean, slotNb: number, tac
                 // <div className={classes.root} hidden={!props.active}>
                 <div className={clsx(classes.root, !props.active ? classes.hide : '')}>
                     <Grid container spacing={0} className={classes.root}>
-                        <Grid container item xs={6} className={classes.fullHeight}> {/*style={{ borderRightStyle: 'solid', borderColor: 'black', borderWidth: '1em' }}>*/}
+                     {false  &&  <Grid container item xs={6} className={classes.fullHeight}> {/*style={{ borderRightStyle: 'solid', borderColor: 'black', borderWidth: '1em' }}>*/}
                             <TimeProfile />
-                        </Grid>
-                        <Grid container item xs={6} className={classes.fullHeight}>
+                        </Grid>}
+                        <Grid container item xs={12} className={classes.fullHeight}>
                             <ActuatorPlacement />
                         </Grid>
                         <Grid item xs={12}>
