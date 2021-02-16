@@ -76,7 +76,7 @@ const RegisterLayout = ({ t, onClickRegister, onClickLoginPage }: registerInterf
                 }
             }
         }
-        if (username.length < 4) {
+        if (username.length < 2) {
             returnValue = false;
             tempError = {
                 ...tempError,
