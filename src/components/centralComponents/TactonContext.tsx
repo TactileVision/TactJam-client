@@ -11,14 +11,14 @@ interface Position {
     z: number
 }
 
-interface Tag {
+export interface Tag {
     name: string,
     id: number,
     creator_id: string
 }
 
 type PositionList = Position[]
-type TagList = Tag[]
+export type TagList = Tag[]
 
 export interface Tacton {
     id: string,
