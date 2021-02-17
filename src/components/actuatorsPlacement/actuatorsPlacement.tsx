@@ -216,7 +216,7 @@ export default function ActuatorPlacement() {
                     {(() => controlCamera ? "Switch to actuator control" : "Switch to camera control")()}
                 </Button>
                 <Canvas
-                    camera={{ fov: 45, aspect: 1, near: 0.1, far: 100, position: [0, 2.5, 3.5]}}
+                    camera={{ fov: 45, aspect: 1, near: 0.1, far: 100, position: [0, 2.5, 2.5]}}
                     className={clsx(classes.canvas, controlCamera ? classes.controlCamCursor : classes.controlActuatorsCursor)}
                     id="canvas3D"
                     // onPointerUp={() => { setSelectedActuator(-1); console.log(actuatorPositions); }}>

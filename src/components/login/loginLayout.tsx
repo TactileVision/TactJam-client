@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { TextField, Grid, Typography, Collapse } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { withTranslation } from 'react-i18next';
 import axios from "axios";
 import CustomAlert from '../centralComponents/CustomAlert'
+import { SettingsInputAntennaTwoTone } from '@material-ui/icons';
 
 
 interface loginInterface {
@@ -49,6 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const LoginLayout = ({ t, onClickLogin, onClickRegisterPage }: loginInterface) => {
     const classes = useStyles();
     const [username, setUsername] = React.useState('');
+    const [state,setState] =  React.useState(false)
     const [password, setPassword] = React.useState('');
     const [errorForm, setErrorForm] = React.useState({
         required: {
@@ -77,6 +79,23 @@ const LoginLayout = ({ t, onClickLogin, onClickRegisterPage }: loginInterface) =
         }
         return (!userNameEmpty && !passwordEmpty);
     };
+
+    useEffect(() => {
+        axios
+            .post("auth/login", {
+                'login': 'FirstSession',
+                'password': 'tactjam0221'
+            })
+            .then((response) => {
+                console.log(response);
+                onClickLogin()
+            })
+            .catch((error) => {
+                console.log("something go wrong");
+                console.log(error)
+                setState(true)
+            });
+    }, [])
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.id === 'username')
@@ -118,7 +137,7 @@ const LoginLayout = ({ t, onClickLogin, onClickRegisterPage }: loginInterface) =
     return (
         <Grid container justify="center" spacing={0} className={classes.root}>
             <Grid item xs={2} />
-            <Grid container item xs={8} justify="center" alignItems="center" spacing={3}>
+           { state && <Grid container item xs={8} justify="center" alignItems="center" spacing={3}>
                 <Grid item xs={12} className={classes.flexStyle}>
                     <Typography variant="h2" display="inline">Welcome to TactJam</Typography>
                 </Grid>
@@ -167,7 +186,7 @@ const LoginLayout = ({ t, onClickLogin, onClickRegisterPage }: loginInterface) =
                         </Button>
                 </Grid>
                 <Grid item xs={4} />
-            </Grid>
+            </Grid>}
             <Grid item xs={2} />
             <Grid item xs={12}>
                 <CustomAlert
