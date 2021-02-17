@@ -16,12 +16,12 @@ function createWindow() {
   });
 
   if(mainWindow) {
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
     mainWindow.loadFile(__dirname + '/index.html');
     mainWindow.on("closed", function () {
       mainWindow = null;
-    });
-    mainWindow.webContents.openDevTools();
+  });
+    // mainWindow.webContents.openDevTools();
   }
 }
 

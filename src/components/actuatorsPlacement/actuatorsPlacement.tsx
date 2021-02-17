@@ -4,8 +4,7 @@ import { DirectionalLight } from "react-three-fiber/components";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Model from './avatar';
 import * as THREE from 'three';
-import { Grid, Button, RootRefProps, IconButton } from "@material-ui/core";
-import { Save } from "@material-ui/icons";
+import { Grid, Button, Typography } from "@material-ui/core";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import clsx from "clsx";
 import { TactonContext } from '../centralComponents/TactonContext';
@@ -33,6 +32,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     controlActuatorsCursor: {
         cursor: "pointer"
+    },
+    instructions: {
+        position: 'fixed',
+        right: 5,
+        bottom: 55,
+        width: 550,
+        color: '#0000008a',
     }
 }));
 
@@ -210,6 +216,14 @@ export default function ActuatorPlacement() {
         <TactonContext.Consumer>
             { ({ actuatorPositions, updateActuators, updateFromServer, needUpdateFromServer}) => (
             <Grid item className={classes.root} xs={12}>
+                <Typography className={classes.instructions} align="right" unselectable="on" hidden={!controlCamera}>
+                    Rotate - drag with left mouse button<br/>
+                    Move - drag with right mouse button<br/>
+                    Zoom - mouse wheel or two fingers up and down on the trackpad
+                </Typography>
+                <Typography className={classes.instructions} align="right" unselectable="on" hidden={controlCamera}>
+                    Drag actuators on the body with the left mouse button to position them
+                </Typography>
                 <Button
                     className={classes.fixed}
                     variant="outlined"
