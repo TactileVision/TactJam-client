@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     fixed: {
         position: 'absolute',
-        bottom: -30,
+        bottom: 8,
         right: 5,
         zIndex: 1
     },
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     instructions: {
         position: 'fixed',
-        right: 5,
+        left: 5,
         bottom: 55,
         width: 550,
         color: '#0000008a',
@@ -216,12 +216,12 @@ export default function ActuatorPlacement() {
         <TactonContext.Consumer>
             { ({ actuatorPositions, updateActuators, updateFromServer, needUpdateFromServer}) => (
             <Grid item className={classes.root} xs={12}>
-                <Typography className={classes.instructions} align="right" unselectable="on" hidden={!controlCamera}>
+                <Typography className={classes.instructions} align="left" unselectable="on" hidden={!controlCamera}>
                     Rotate - drag with left mouse button<br/>
                     Move - drag with right mouse button<br/>
                     Zoom - mouse wheel or two fingers up and down on the trackpad
                 </Typography>
-                <Typography className={classes.instructions} align="right" unselectable="on" hidden={controlCamera}>
+                <Typography className={classes.instructions} align="left" unselectable="on" hidden={controlCamera}>
                     Drag actuators on the body with the left mouse button to position them
                 </Typography>
                 <Button
