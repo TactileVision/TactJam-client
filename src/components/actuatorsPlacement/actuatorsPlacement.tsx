@@ -4,11 +4,44 @@ import { DirectionalLight } from "react-three-fiber/components";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Model from './avatar';
 import * as THREE from 'three';
-import { Grid, Button, RootRefProps, IconButton } from "@material-ui/core";
-import { Save } from "@material-ui/icons";
+import { Grid, Button, Typography } from "@material-ui/core";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import clsx from "clsx";
 import { TactonContext } from '../centralComponents/TactonContext';
+
+
+const useStyles = makeStyles((theme: Theme) => ({
+    root: {
+        // flexGrow: 1,
+        width: '100%',
+        height: '100%',
+        position: "relative"
+    },
+    canvas: {
+        minHeight: 600,
+        maxHeight: 720
+    },
+    fixed: {
+        position: 'absolute',
+        bottom: -30,
+        right: 5,
+        zIndex: 1
+    },
+    controlCamCursor: {
+        cursor: "all-scroll"
+    },
+    controlActuatorsCursor: {
+        cursor: "pointer"
+    },
+    instructions: {
+        position: 'fixed',
+        right: 5,
+        bottom: 55,
+        width: 550,
+        color: '#0000008a',
+    }
+}));
+
 
 
 /*** camera control section ***/
@@ -120,7 +153,8 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
     // update every frame ==> used to move actuators around
     useFrame((state) => {
         //TODO optimize number of updates
-        if (props.selectedActuator < 0 && needUpdate) {
+        if (needUpdate) {
+            console.log("update")
             props.updatePositions(actuators.map<any>((el, i) => el.current ? el.current.position : null));
             needUpdate = false;
         }
@@ -137,8 +171,6 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
         }
 
         if (props.selectedActuator > -1 && !props.controlCamera) {
-            //TODO deal with types
-            // @ts-ignore
             const mesh = actuators[props.selectedActuator].current;
             state.raycaster.setFromCamera(state.mouse, state.camera);
             //TODO deal with types
@@ -171,31 +203,6 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
 
 
 
-const useStyles = makeStyles((theme: Theme) => ({
-    root: {
-        // flexGrow: 1,
-        width: '100%',
-        height: '100%',
-        position: "relative"
-    },
-    canvas: {
-        minHeight: 600,
-        maxHeight: 720
-    },
-    fixed: {
-        position: 'absolute',
-        bottom: 15,
-        right: 5,
-        zIndex: 1
-    },
-    controlCamCursor: {
-        cursor: "all-scroll"
-    },
-    controlActuatorsCursor: {
-        cursor: "pointer"
-    }
-}));
-
 export default function ActuatorPlacement() {
     // change cursor mode (move actuator or move view)
     const [actuators, setActuators] = useState(false);
@@ -209,6 +216,14 @@ export default function ActuatorPlacement() {
         <TactonContext.Consumer>
             { ({ actuatorPositions, updateActuators, updateFromServer, needUpdateFromServer}) => (
             <Grid item className={classes.root} xs={12}>
+                <Typography className={classes.instructions} align="right" unselectable="on" hidden={!controlCamera}>
+                    Rotate - drag with left mouse button<br/>
+                    Move - drag with right mouse button<br/>
+                    Zoom - mouse wheel or two fingers up and down on the trackpad
+                </Typography>
+                <Typography className={classes.instructions} align="right" unselectable="on" hidden={controlCamera}>
+                    Drag actuators on the body with the left mouse button to position them
+                </Typography>
                 <Button
                     className={classes.fixed}
                     variant="outlined"

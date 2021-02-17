@@ -134,6 +134,10 @@ const LoginLayout = ({ t, onClickLogin, onClickRegisterPage }: loginInterface) =
         }
     }
 
+    const loginOnEnter = (event: any) => {
+        if(event.key === "Enter") { login(); }
+    }
+
     return (
         <Grid container justify="center" spacing={0} className={classes.root}>
             <Grid item xs={2} />
@@ -149,6 +153,7 @@ const LoginLayout = ({ t, onClickLogin, onClickRegisterPage }: loginInterface) =
                         fullWidth={true}
                         value={username}
                         onChange={handleChange}
+                        onKeyDown={loginOnEnter}
                         helperText={errorForm.required.username ? t('other.fieldRequired') : ''}
                         error={errorForm.required.username}
                     />
@@ -161,6 +166,7 @@ const LoginLayout = ({ t, onClickLogin, onClickRegisterPage }: loginInterface) =
                         fullWidth={true}
                         value={password}
                         onChange={handleChange}
+                        onKeyDown={loginOnEnter}
                         helperText={errorForm.required.password ? t('other.fieldRequired') : ''}
                         error={errorForm.required.password}
                     />
@@ -174,14 +180,14 @@ const LoginLayout = ({ t, onClickLogin, onClickRegisterPage }: loginInterface) =
                 <Grid item xs={12} className={classes.spacer} />
                 <Grid item xs={4} />
                 <Grid item xs={4}>
-                    <Button variant="outlined" onClick={() => login()} fullWidth={true}>
+                    <Button variant="outlined" onClick={() => login()} fullWidth>
                         Login
-                        </Button>
+                    </Button>
                 </Grid>
                 <Grid item xs={4} />
                 <Grid item xs={4} />
                 <Grid item xs={4}>
-                    <Button variant="outlined" onClick={() => onClickRegisterPage()}>
+                    <Button variant="outlined" onClick={() => onClickRegisterPage()} fullWidth>
                         No user? Register here.
                         </Button>
                 </Grid>

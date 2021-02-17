@@ -20,6 +20,17 @@ const useStyles = makeStyles((theme) => ({
     },
     formElement: {
         margin: '15px 0',
+    },
+    dropdown: {
+        fontFamily: 'Roboto, sans-serif'
+    },
+    label: {
+        fontFamily: 'Roboto, sans-serif',
+        fontSize: '1rem',
+        lineHeight: '1',
+        fontWeight: 400,
+        color: '#0000008a',
+        marginBottom: 5
     }
 }));
 
@@ -139,22 +150,22 @@ const SaveLayout = (props: SaveLayoutProps) => {
     }
 
     const createNewTags = (input: string): Selector[] => {
-        let nextSpace: number = 0;
+        // let nextSpace: number = 0;
         let nextHash: number = 0;
         let nextSemicolon: number = 0;
         let nextComa: number = 0;
         let nextAt: number = 0;
         let tagArray = [] as Selector[];
         do {
-            nextSpace = input.indexOf(' ');
+            // nextSpace = input.indexOf(' ');
             nextHash = input.indexOf('#');
             nextAt = input.indexOf('@');
             nextSemicolon = input.indexOf(';');
             nextComa = input.indexOf(',');
             //set Nextbreak to the next index of the breaking char
             let nextBreak: number = input.length;
-            if (nextSpace < nextBreak && nextSpace !== -1)
-                nextBreak = nextSpace;
+            // if (nextSpace < nextBreak && nextSpace !== -1)
+            //     nextBreak = nextSpace;
             if (nextHash < nextBreak && nextHash !== -1)
                 nextBreak = nextHash;
             if (nextSemicolon < nextBreak && nextSemicolon !== -1)
@@ -179,7 +190,8 @@ const SaveLayout = (props: SaveLayoutProps) => {
                     input = input.substring(nextBreak + 1, input.length);
                 }
             }
-        } while (nextSpace >= 0 || nextHash >= 0 || nextSemicolon >= 0 || nextComa >= 0 || nextAt >= 0)
+        // } while (nextSpace >= 0 || nextHash >= 0 || nextSemicolon >= 0 || nextComa >= 0 || nextAt >= 0)
+        } while (nextHash >= 0 || nextSemicolon >= 0 || nextComa >= 0 || nextAt >= 0)
         return tagArray;
     }
     //set the values in the select box
@@ -242,7 +254,7 @@ const SaveLayout = (props: SaveLayoutProps) => {
                     <FormControl fullWidth={true}>
                         <TextField
                             id="title"
-                            label="Title"
+                            label="Tacton's name"
                             value={title}
                             onChange={handleChange}
                             helperText={errorForm.requiredTitle ? props.t('other.fieldRequired') : ''}
@@ -259,8 +271,10 @@ const SaveLayout = (props: SaveLayoutProps) => {
                             className={classes.formElement}
                         />
                         <FormControl className={classes.formElement}>
+                            <span className={classes.label}>Custom tags</span>
                             <CreatableSelect
                                 id='customTags'
+                                className={classes.dropdown}
                                 isMulti
                                 value={selectCustomTag.value}
                                 onChange={(value: any, action: any) => changeTag(value, action, TagKind.CustomTag)}
@@ -268,8 +282,10 @@ const SaveLayout = (props: SaveLayoutProps) => {
                         </FormControl>
                         <FormControl
                             className={classes.formElement}>
+                            <span className={classes.label}>Body tags</span>
                             <CreatableSelect
                                 id='bodyTags'
+                                className={classes.dropdown}
                                 isMulti
                                 value={selectBodyTag.value}
                                 onChange={(value: any, action: any) => changeTag(value, action, TagKind.BodyTag)}

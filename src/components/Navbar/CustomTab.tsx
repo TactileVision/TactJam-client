@@ -68,14 +68,14 @@ const CustomTab = ({ onClickTab, slotNumber, selected }: buttonInterface) => {
             </Button>
           </Grid>
           <Grid item xs={1}>
-            <Tooltip title="Import from the server">
+            <Tooltip title="Download tacton">
               <IconButton aria-label="import" className={classes.icon} onClick={() => onClickTab(slotNumber, Layouts.ImportLayout)}>
                 <CloudDownload />
               </IconButton>
             </Tooltip>
           </Grid>
           <Grid item xs={1}>
-            <Tooltip title="Upload to the server">
+            <Tooltip title="Upload tacton">
               <IconButton aria-label="save" className={classes.icon} onClick={() => onClickTab(slotNumber, Layouts.SaveLayout)}>
                 <CloudUpload />
               </IconButton>
