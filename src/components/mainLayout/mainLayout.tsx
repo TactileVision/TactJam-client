@@ -66,7 +66,7 @@ export default function MainLayout(props: { active: boolean, slotNb: number, tac
                         </Grid>
                         {switchSaveLayoutError(saveRequested, informProvidList)}
                     </Grid>
-                    <ConnectionLine />
+                    {/*<ConnectionLine />*/}
                 </div>)}
         </InformContext.Consumer>
     );
