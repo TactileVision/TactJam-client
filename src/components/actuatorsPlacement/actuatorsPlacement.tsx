@@ -11,6 +11,33 @@ import clsx from "clsx";
 import { TactonContext } from '../centralComponents/TactonContext';
 
 
+const useStyles = makeStyles((theme: Theme) => ({
+    root: {
+        // flexGrow: 1,
+        width: '100%',
+        height: '100%',
+        position: "relative"
+    },
+    canvas: {
+        minHeight: 600,
+        maxHeight: 720
+    },
+    fixed: {
+        position: 'absolute',
+        bottom: -30,
+        right: 5,
+        zIndex: 1
+    },
+    controlCamCursor: {
+        cursor: "all-scroll"
+    },
+    controlActuatorsCursor: {
+        cursor: "pointer"
+    }
+}));
+
+
+
 /*** camera control section ***/
 extend({ OrbitControls });
 
@@ -120,7 +147,8 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
     // update every frame ==> used to move actuators around
     useFrame((state) => {
         //TODO optimize number of updates
-        if (props.selectedActuator < 0 && needUpdate) {
+        if (needUpdate) {
+            console.log("update")
             props.updatePositions(actuators.map<any>((el, i) => el.current ? el.current.position : null));
             needUpdate = false;
         }
@@ -137,8 +165,6 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
         }
 
         if (props.selectedActuator > -1 && !props.controlCamera) {
-            //TODO deal with types
-            // @ts-ignore
             const mesh = actuators[props.selectedActuator].current;
             state.raycaster.setFromCamera(state.mouse, state.camera);
             //TODO deal with types
@@ -170,31 +196,6 @@ const ActuatorControls = (props: ActuatorControlsProps) => {
 /*** end of actuator section ***/
 
 
-
-const useStyles = makeStyles((theme: Theme) => ({
-    root: {
-        // flexGrow: 1,
-        width: '100%',
-        height: '100%',
-        position: "relative"
-    },
-    canvas: {
-        minHeight: 600,
-        maxHeight: 720
-    },
-    fixed: {
-        position: 'absolute',
-        bottom: 15,
-        right: 5,
-        zIndex: 1
-    },
-    controlCamCursor: {
-        cursor: "all-scroll"
-    },
-    controlActuatorsCursor: {
-        cursor: "pointer"
-    }
-}));
 
 export default function ActuatorPlacement() {
     // change cursor mode (move actuator or move view)

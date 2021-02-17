@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme: Theme) =>
         heading: {
             flexBasis: '25%',
             flexShrink: 0,
+        },
+        tag: {
+            marginRight: 10
         }
     }),
 );
@@ -106,13 +109,13 @@ const ImportCard = ({ tacton, onClickImport }: ImportCardInterface) => {
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                     >
-                        <Typography className={classes.heading}>Tags</Typography>
+                        <Typography className={classes.heading}>Custom tags</Typography>
                         {!expanded && <Typography>{tacton?.tags?.map((value, index) => {
                             if (index < 4)
-                                return (<span key={value.id}>&nbsp;{'#'}{value.name}&nbsp;</span>)
+                                return (<span key={value.id} className={classes.tag}>{value.name}</span>)
                         })}</Typography>}
                         {expanded && <Typography>{tacton?.tags?.map((value, index) => {
-                            return (<span key={value.id}>&nbsp;{'#'}{value.name}&nbsp;</span>)
+                            return (<span key={value.id} className={classes.tag}>{value.name}</span>)
                         })}</Typography>}
                     </AccordionSummary>
                 </Accordion>
@@ -122,13 +125,13 @@ const ImportCard = ({ tacton, onClickImport }: ImportCardInterface) => {
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                     >
-                        <Typography className={classes.heading}>Bodytags</Typography>
+                        <Typography className={classes.heading}>Body tags</Typography>
                         {!expanded && <Typography> {tacton?.bodytags?.map((value, index) => {
                             if (index < 4)
-                                return (<span key={value.id}>&nbsp;{'#'}{value.name}&nbsp;</span>)
+                                return (<span key={value.id} className={classes.tag}>{value.name}</span>)
                         })}</Typography>}
                         {expanded && <Typography>{tacton?.tags?.map((value, index) => {
-                            return (<span key={value.id}>&nbsp;{'#'}{value.name}&nbsp;</span>)
+                            return (<span key={value.id} className={classes.tag}>{value.name}</span>)
                         })}</Typography>}
                     </AccordionSummary>
                 </Accordion>
