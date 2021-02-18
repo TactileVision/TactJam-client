@@ -31,7 +31,10 @@ const useStyles = makeStyles((theme: Theme) => ({
         cursor: "all-scroll"
     },
     controlActuatorsCursor: {
-        cursor: "pointer"
+        cursor: "grab"
+    },
+    grabActuator: {
+        cursor: "grabbing"
     },
     instructions: {
         position: 'fixed',
@@ -232,7 +235,7 @@ export default function ActuatorPlacement() {
                 </Button>
                 <Canvas
                     camera={{ fov: 45, aspect: 1, near: 0.1, far: 100, position: [0, 2.5, 2.5]}}
-                    className={clsx(classes.canvas, controlCamera ? classes.controlCamCursor : classes.controlActuatorsCursor)}
+                    className={clsx(classes.canvas, controlCamera ? classes.controlCamCursor : (selectedActuator >= 0 ? classes.grabActuator : classes.controlActuatorsCursor))}
                     id="canvas3D"
                     // onPointerUp={() => { setSelectedActuator(-1); console.log(actuatorPositions); }}>
                     onPointerUp={() => setSelectedActuator(-1)}
