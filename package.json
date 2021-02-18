@@ -72,7 +72,7 @@
     "linux": {
       "target": [
         "AppImage",
-        "tag.gz"
+        "tar.gz"
       ],
       "executableName": "TactJam"
     }
