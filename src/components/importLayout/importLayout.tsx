@@ -38,6 +38,10 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         listRight: {
             marginRight: '10px'
+        },
+        fixedButton: {
+            position: 'fixed',
+            bottom: 10,
         }
     }),
 );
@@ -86,7 +90,7 @@ const ImportLayout = (props: ImportLayoutProps) => {
     }
     return (
         // <Grid container spacing={3} hidden={!props.active}>
-        <Grid container className={classes.root}>
+        <Grid container className={classes.root} style={{ marginBottom: 40 }}>
             <Grid container>
                 <Grid item xs={12}>
                     <List className={classes.listLeft}>
@@ -96,7 +100,7 @@ const ImportLayout = (props: ImportLayoutProps) => {
                     </List>
                 </Grid>
             </Grid>
-            <Grid item container xs={12} justify="center" alignContent="center" style={{ marginBottom: 10 }}>
+            <Grid item container xs={12} justify="center" alignContent="center" className={classes.fixedButton}>
                 <Grid item>
                     <Button variant="contained"
                         onClick={() => props.returnMainLayout()}>

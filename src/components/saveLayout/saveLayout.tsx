@@ -108,8 +108,8 @@ const SaveLayout = (props: SaveLayoutProps) => {
 
     async function postTacton() {
         const hexString = buf2hex(rawTacton);
-        const serverCustomTag: { name: string }[] = []
-        const serverBodyTag: { name: string }[] = []
+        const serverCustomTag: { name: string }[] = selectCustomTag.value.length ? [] : null;
+        const serverBodyTag: { name: string }[] = selectBodyTag.value.length ? [] : null;
         for (let i = 0; i < selectCustomTag.value.length; i++) {
             serverCustomTag.push({ name: selectCustomTag.value[i].label })
         }
@@ -127,12 +127,11 @@ const SaveLayout = (props: SaveLayoutProps) => {
         }).then((response) => {
             setTactonMetadata(response.data)
             props.returnToMainLayout(true)
-        })
-            .catch((error) => {
+        }).catch((error) => {
                 console.log("something go wrong");
                 console.log(error)
                 console.log(error.data)
-            });
+        });
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

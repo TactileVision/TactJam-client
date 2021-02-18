@@ -7,6 +7,8 @@ import ConnectionLine from "@/components/deviceConnection/connectionLine";
 import { InformContext, InformProvided } from '../centralComponents/InformContext'
 import clsx from 'clsx';
 import CustomAlert from '../centralComponents/CustomAlert'
+import {Alert} from "@material-ui/lab";
+import {Snackbar} from "@material-ui/core";
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
         // flexGrow: 1,
@@ -45,6 +47,8 @@ export default function MainLayout(props: { active: boolean, slotNb: number, tac
         }
     }
 
+    
+
     return (
         <InformContext.Consumer>
             {({ saveRequested, informProvidList }) => (
@@ -57,13 +61,18 @@ export default function MainLayout(props: { active: boolean, slotNb: number, tac
                         <Grid container item xs={12} className={classes.fullHeight}>
                             <ActuatorPlacement />
                         </Grid>
-                        <Grid item xs={12}>
-                            <CustomAlert
-                                showAlert={props.tactonSaved}
-                                notifyParentCancel={() => props.cancelMessage()}
-                                message='save.success'
-                                severity='success' />
-                        </Grid>
+                        <Snackbar open={props.tactonSaved} autoHideDuration={3000} onClose={() => props.cancelMessage()}>
+                            <Alert severity="success" onClose={() => props.cancelMessage()}>
+                                Tacton successfully uploaded!
+                            </Alert>
+                        </Snackbar>
+                        {/*<Grid item xs={12}>*/}
+                        {/*    <CustomAlert*/}
+                        {/*        showAlert={props.tactonSaved}*/}
+                        {/*        notifyParentCancel={() => props.cancelMessage()}*/}
+                        {/*        message='save.success'*/}
+                        {/*        severity='success' />*/}
+                        {/*</Grid>*/}
                         {switchSaveLayoutError(saveRequested, informProvidList)}
                     </Grid>
                     {/*<ConnectionLine />*/}

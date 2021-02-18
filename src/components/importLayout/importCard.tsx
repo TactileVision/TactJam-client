@@ -89,7 +89,7 @@ const ImportCard = ({ tacton, onClickImport }: ImportCardInterface) => {
                 <Accordion expanded={expanded} onChange={handleChange()}>
                     <AccordionSummary
                         style={{ padding: 0 }}
-                        expandIcon={(tacton.description.length > 100 || tacton?.tags?.length > 4 || tacton?.bodytags?.length > 4) && <ExpandMoreIcon />}
+                        expandIcon={(tacton.description.length > 79 || tacton?.tags?.length > 4 || tacton?.bodytags?.length > 4) && <ExpandMoreIcon />}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                     >
@@ -103,34 +103,34 @@ const ImportCard = ({ tacton, onClickImport }: ImportCardInterface) => {
                         </Typography>
                     </AccordionDetails>
                 </Accordion>
-                <Accordion expanded={false} onChange={handleChange()}>
+                <Accordion expanded={false}>
                     <AccordionSummary
                         style={{ padding: 0 }}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                     >
                         <Typography className={classes.heading}>Custom tags</Typography>
-                        {!expanded && <Typography>{tacton?.tags?.map((value, index) => {
-                            if (index < 4)
-                                return (<span key={value.id} className={classes.tag}>{value.name}</span>)
-                        })}</Typography>}
-                        {expanded && <Typography>{tacton?.tags?.map((value, index) => {
+                        {/*{!expanded && <Typography>{tacton?.tags?.map((value, index) => {*/}
+                        {/*    if (index < 4)*/}
+                        {/*        return (<span key={value.id} className={classes.tag}>{value.name}</span>)*/}
+                        {/*})}</Typography>}*/}
+                        {<Typography>{tacton?.tags?.map((value, index) => {
                             return (<span key={value.id} className={classes.tag}>{value.name}</span>)
                         })}</Typography>}
                     </AccordionSummary>
                 </Accordion>
-                <Accordion expanded={false} onChange={handleChange()}>
+                <Accordion expanded={false}>
                     <AccordionSummary
                         style={{ padding: 0 }}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                     >
                         <Typography className={classes.heading}>Body tags</Typography>
-                        {!expanded && <Typography> {tacton?.bodytags?.map((value, index) => {
-                            if (index < 4)
-                                return (<span key={value.id} className={classes.tag}>{value.name}</span>)
-                        })}</Typography>}
-                        {expanded && <Typography>{tacton?.tags?.map((value, index) => {
+                        {/*{!expanded && <Typography> {tacton?.bodytags?.map((value, index) => {*/}
+                        {/*    if (index < 4)*/}
+                        {/*        return (<span key={value.id} className={classes.tag}>{value.name}</span>)*/}
+                        {/*})}</Typography>}*/}
+                        {<Typography>{tacton?.bodytags?.map((value, index) => {
                             return (<span key={value.id} className={classes.tag}>{value.name}</span>)
                         })}</Typography>}
                     </AccordionSummary>
