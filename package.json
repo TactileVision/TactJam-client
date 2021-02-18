@@ -1,6 +1,6 @@
 {
   "name": "tactjam",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "TactJam GUI that enables communicating with a TactJam device as well as saving and loading tacton data from a server.",
   "homepage": "https://github.com/TactileVision/TactJam-client/",
   "main": "build/main.js",
@@ -15,8 +15,8 @@
     "compile:linux": "electron-builder --linux"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Tactile Vision",
+  "license": "MIT",
   "devDependencies": {
     "@material-ui/core": "^4.11.2",
     "@material-ui/icons": "^4.11.2",
@@ -52,8 +52,8 @@
   },
   "build": {
     "appId": "TactJam.GUI",
-    "productName": "TactJam 1.0.0",
-    "copyright": "Copyright © 2021 Tactile Vision",
+    "productName": "TactJam",
+    "copyright": "Copyright © 2021 Tactile Vision (MIT License)",
     "files": [
       "build/*",
       "build/webpack-assets/*"
@@ -67,14 +67,14 @@
       "icon": "build/icon.png"
     },
     "dmg": {
-      "title": "TactJam 1.0.0"
+      "title": "TactJam"
     },
     "linux": {
       "target": [
         "AppImage",
         "tag.gz"
       ],
-      "executableName": "TactJam 1.0.0"
+      "executableName": "TactJam"
     }
   },
   "repository": {
