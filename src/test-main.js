@@ -102,6 +102,7 @@ let hardcodedTacton = [
 hardcodedTacton = hardcodedTacton.map(VTP.encodeInstruction);
 
 const instructionWord = VTP.writeInstructionWords(hardcodedTacton)
+console.log(instructionWord);
 const dataView = new DataView(instructionWord)
 const decoder = new TextDecoder('utf-8')
 console.log("decoded data: "+ decoder.decode(dataView))

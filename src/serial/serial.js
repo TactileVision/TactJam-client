@@ -1,6 +1,24 @@
 const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline')
 const Delimiter = require('@serialport/parser-delimiter')
+const ByteLength = require('@serialport/parser-delimiter')
+
+
+// code fetched from https://github.com/doomjs/dataview-getstring/blob/master/index.js
+DataView.prototype.getString = function(offset, length){
+    var end = typeof length == 'number' ? offset + length : this.byteLength;
+    var text = '';
+    var val = -1;
+
+    while (offset < this.byteLength && offset < end){
+        val = this.getUint8(offset++);
+        if (val == 0) break;
+        text += String.fromCharCode(val);
+    }
+
+    return text;
+};
+
 
 function SerialConnection() {
     let tactjamPort = null;
@@ -20,7 +38,7 @@ function SerialConnection() {
 
         // close previous instance
         const serialPort = new SerialPort(port, {
-            baudRate: 9600,
+            baudRate: 115200,
             databits: 8,
             parity: 'none',
             stopBits: 1,
@@ -34,24 +52,45 @@ function SerialConnection() {
             // socket.emit('shoe_connected', true);
             if (err) {
                 console.log("Could not open " + port);
+                console.log(err);
                 return;
             }
             console.log("connected to port " + port);
             // const parser = new Readline();
             // console.log('buffer', Buffer.alloc(1, 0));
-            const parser = new Delimiter({ delimiter: '\n' });
+            const parser = new Delimiter({ delimiter: '\r\n' });
             serialPort.pipe(parser);
 
+            // not working...
+            // const parser = serialPort.pipe(new ByteLength({ length: 6 }));
+            
             parser.on('data', (line) => {
                 // console.log(typeof(line), line.buffer.slice(line.byteOffset, line.byteOffset + line.byteLength));
-                const msg = line.toString();
-                // welcome message = tactjam
-                if(msg.trim() === "tactjam") {
-                    // console.log("yeah");
-                    tactjamPort = serialPort;
-                    connection.onDeviceConnect(tactjamPort);
-                    connection.deviceConnected = true;
-                    tactjamPort.write("received");
+                let fullMsg = new DataView(line.buffer.slice(line.byteOffset, line.byteOffset + line.byteLength));
+                // console.log("Full message: " + fullMsg);
+                if(fullMsg.byteLength > 6) {
+                    // TODO be more secure, this could crash easily
+                    const msg = {
+                        type: fullMsg.getUint8(0),
+                        slot: fullMsg.getUint8(1),
+                        byteLength: fullMsg.getUint32(2, true),
+                        content: ""
+                    }
+                    if(msg.byteLength) msg.content = fullMsg.getString(6, msg.byteLength)
+
+                    // console.log("Device msg: " + msg.type + " " + msg.slot + " " + msg.byteLength + " " + msg.content);
+                    if(msg.type === 3 && msg.content === "asking" && !connection.deviceConnected) {
+                        // console.log("received connection request");
+                        tactjamPort = serialPort;
+                        connection.onDeviceConnect(tactjamPort);
+                        connection.deviceConnected = true;
+                        const buf = Buffer.alloc(12);
+                        buf.writeInt8(3, 0); // connection msg type
+                        buf.writeInt8(0, 1); // no slot related
+                        buf.writeUInt32LE(6, 2); // no slot attached
+                        buf.write("granted", 6);
+                        tactjamPort.write(buf);
+                    }
                 }
             });
         });

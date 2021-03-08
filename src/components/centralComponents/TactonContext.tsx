@@ -84,11 +84,23 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
             actuatorPositions: new Array(8).fill(null).map(() => new THREE.Vector3(0, 0, 0))
         })
 
-        ipcRenderer.on('tactonReceived', (event, tactonData) => {
+        // update tacton's data when device sends one
+        ipcRenderer.on('setTacton', (event, args: { slot: number, byteArray: ArrayBuffer }) => {
             // update tacton information if this slot is the one targeted
-            if (tactonData.slotNb == props.slotNb) {
-                tactonReceived(tactonData.slotNb)
-                setState({ ...state, rawTacton: tactonData.rawData })
+            if (args.slot === props.slotNb) {
+                console.log("setting tacton on slot #"+args.slot, args.byteArray);
+                tactonReceived(args.slot)
+                console.log(args.byteArray)
+                // const encodedTacton: tactonAttributes = ;
+                setState({ ...state, rawTacton: args.byteArray, encodedTacton: encodeTacton(args.byteArray) })
+            }
+        })
+
+        // retrieve tacton's data when device asks
+        ipcRenderer.on('getTacton', (event, slot: number) => {
+            // update tacton information if this slot is the one targeted
+            if (slot === props.slotNb) {
+                ipcRenderer.send('sendTactonToDevice', { slot: slot, byteArray: state.rawTacton });
             }
         })
     }, [])
@@ -116,7 +128,8 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
         for (let i = 1; i <= 8; i++) { actuators[i] = []; }
         let currentTime = 0;
 
-        VTP.readInstructionWords(tactons[0]).map((el: object, i: number) => VTP.decodeInstruction(el))
+        // VTP.readInstructionWords(tactons[0]).map((el: object, i: number) => VTP.decodeInstruction(el))
+        VTP.readInstructionWords(instructionWords).map((el: object, i: number) => VTP.decodeInstruction(el))
             .map((instruction: VTPInstruction) => {
                 currentTime += instruction.timeOffset;
                 if (instruction.type == 'SetAmplitude') {
