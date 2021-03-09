@@ -12,7 +12,7 @@ DataView.prototype.getString = function(offset, length){
 
     while (offset < this.byteLength && offset < end){
         val = this.getUint8(offset++);
-        if (val == 0) break;
+        if (val === 0) break;
         text += String.fromCharCode(val);
     }
 
@@ -69,7 +69,6 @@ function SerialConnection() {
                 let fullMsg = new DataView(line.buffer.slice(line.byteOffset, line.byteOffset + line.byteLength));
                 // console.log("Full message: " + fullMsg);
                 if(fullMsg.byteLength > 6) {
-                    // TODO be more secure, this could crash easily
                     const msg = {
                         type: fullMsg.getUint8(0),
                         slot: fullMsg.getUint8(1),
@@ -80,15 +79,15 @@ function SerialConnection() {
 
                     // console.log("Device msg: " + msg.type + " " + msg.slot + " " + msg.byteLength + " " + msg.content);
                     if(msg.type === 3 && msg.content === "asking" && !connection.deviceConnected) {
-                        // console.log("received connection request");
                         tactjamPort = serialPort;
                         connection.onDeviceConnect(tactjamPort);
                         connection.deviceConnected = true;
-                        const buf = Buffer.alloc(12);
+                        
+                        const buf = Buffer.alloc(13);
                         buf.writeInt8(3, 0); // connection msg type
                         buf.writeInt8(0, 1); // no slot related
-                        buf.writeUInt32LE(6, 2); // no slot attached
-                        buf.write("granted", 6);
+                        buf.writeUInt32LE(7, 2);
+                        buf.write("granted", 6, "utf-8");
                         tactjamPort.write(buf);
                     }
                 }

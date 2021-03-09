@@ -85,35 +85,21 @@ serialConnection.onDeviceConnect = (port: any) => {
   }
   if(msg.byteLength) msg.content = fullMsg.buffer.slice(6);
 
-  console.log("Device msg: " + msg.type + " " + msg.slot + " " + msg.byteLength + " " + msg.content.byteLength);
+  console.log("Device msg: " + msg.type + " " + msg.slot + " " + msg.byteLength + " " + msg.content?.byteLength);
 
-  if(msg.type == 1) { // TactJam device is sending a tacton
+  if(msg.type === 1) { // TactJam device is sending a tacton
     console.log("setting tacton on slot #"+msg.slot);
     mainWindow?.webContents.send('setTacton', { slot: msg.slot, byteArray: msg.content });
   }
-    if(msg.type == 2) { // TactJam device is asking for a tacton
-      console.log("getting tacton from slot #"+msg.slot);
-      mainWindow?.webContents.send('getTacton', msg.slot);
-    }
-    
-    // only listening to tacton's received for now
-    // if(!line.startsWith("<tacton")) return
-    //
-    // const tacton: {slotNb: number, rawData: string} = { slotNb: 0, rawData: null };
-    // // get slot number to update
-    // tacton.slotNb = +line.match(/"[1-3]"/)[0][1]
-    // // get bytes string
-    // const bytes = line.match(/>.*</)[0]
-    // //TODO translate string into Byte array
-    // tacton.rawData = bytes.substring(1, bytes.length-2)
-    // console.log("Received tacton: ")
-    // console.log(tacton)
-    // mainWindow?.webContents.send('tactonReceived', tacton)
+  if(msg.type === 2) { // TactJam device is asking for a tacton
+    console.log("getting tacton from slot #"+msg.slot);
+    mainWindow?.webContents.send('getTacton', msg.slot);
+  }
   })
 
-  const parser2 = new ReadLine();
-  serialPort.pipe(parser2);
-  parser2.on('data', console.log);
+  // const parser2 = new ReadLine();
+  // serialPort.pipe(parser2);
+  // parser2.on('data', console.log);
 }
 
 serialConnection.onDeviceDisconnect = () => {
@@ -132,10 +118,16 @@ serialConnection.checkPortsContinuously()
 // sending tacton information to device
 ipcMain.on('sendTactonToDevice', (event, args: { slot: number, byteArray: ArrayBuffer }) => {
   console.log("sending tacton to device on slot #"+args.slot);
-  const buf1 = Buffer.alloc(6 + args.byteArray.byteLength);
+  console.log(args.byteArray);
+  const size = 6 + (args.byteArray ? args.byteArray.byteLength : 0);
+  const buf1 = Buffer.alloc(size);
   buf1.writeInt8(2, 0); // receive msg type
   buf1.writeInt8(args.slot, 1); // no slot related
-  buf1.writeUInt32LE(args.byteArray.byteLength, 2); // no slot attached
-  const buf2 = Buffer.from(args.byteArray, args.byteArray.byteLength);
-  serialPort?.write(Buffer.concat([buf1, buf2]), buf1.length + buf2.length);
+  buf1.writeUInt32LE(args.byteArray ? args.byteArray.byteLength : 0, 2); // no slot attached
+  if(args.byteArray !== null) {
+    const buf2 = Buffer.from(args.byteArray, args.byteArray.byteLength);
+    serialPort?.write(Buffer.concat([buf1, buf2]), buf1.length + buf2.length);
+  } else {
+    serialPort?.write(buf1);
+  }
 })

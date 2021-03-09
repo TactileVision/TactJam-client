@@ -62,7 +62,7 @@ const TactonContext = createContext<
         rawTacton: ArrayBufferLike,
         encodedTacton: tactonAttributes,
         tactonMetadata: Tacton,
-        setTactonDemo: () => void,
+        // setTactonDemo: () => void,
         setTacton: (tacton: Tacton) => void,
         setTactonMetadata: (tacton: Tacton) => void,
     }>(null);
@@ -90,7 +90,6 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
             if (args.slot === props.slotNb) {
                 console.log("setting tacton on slot #"+args.slot, args.byteArray);
                 tactonReceived(args.slot)
-                console.log(args.byteArray)
                 // const encodedTacton: tactonAttributes = ;
                 setState({ ...state, rawTacton: args.byteArray, encodedTacton: encodeTacton(args.byteArray) })
             }
@@ -100,6 +99,7 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
         ipcRenderer.on('getTacton', (event, slot: number) => {
             // update tacton information if this slot is the one targeted
             if (slot === props.slotNb) {
+                console.log("getting tacton from slot #"+slot);
                 ipcRenderer.send('sendTactonToDevice', { slot: slot, byteArray: state.rawTacton });
             }
         })
@@ -181,21 +181,21 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
         })
     }
 
-    const setNewTactonDemo = () => {
-        const instructionWords = new Uint8Array([
-            0x10, 0x00, 0x00, 0xEA, 0x20, 0x00, 0x00, 0x7B, 0x10, 0x20, 0x01, 0x59,
-            0x10, 0x20, 0xC9, 0xC8, 0x10, 0x10, 0x03, 0x15, 0x00, 0x00, 0x07, 0xD0,
-            0x20, 0x00, 0x00, 0xEA, 0x10, 0x20, 0x02, 0x37
-        ]).buffer;
-
-        const encodedTacton: tactonAttributes = encodeTacton(instructionWords)
-        tactonReceived(props.slotNb)
-        setState({
-            ...state,
-            rawTacton: instructionWords,
-            encodedTacton: encodedTacton
-        })
-    }
+    // const setNewTactonDemo = () => {
+    //     const instructionWords = new Uint8Array([
+    //         0x10, 0x00, 0x00, 0xEA, 0x20, 0x00, 0x00, 0x7B, 0x10, 0x20, 0x01, 0x59,
+    //         0x10, 0x20, 0xC9, 0xC8, 0x10, 0x10, 0x03, 0x15, 0x00, 0x00, 0x07, 0xD0,
+    //         0x20, 0x00, 0x00, 0xEA, 0x10, 0x20, 0x02, 0x37
+    //     ]).buffer;
+    //
+    //     const encodedTacton: tactonAttributes = encodeTacton(instructionWords)
+    //     tactonReceived(props.slotNb)
+    //     setState({
+    //         ...state,
+    //         rawTacton: instructionWords,
+    //         encodedTacton: encodedTacton
+    //     })
+    // }
 
     return (
         <TactonContext.Provider value={
@@ -208,7 +208,7 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
                 rawTacton: state.rawTacton,
                 encodedTacton: state.encodedTacton,
                 tactonMetadata: state.tactonMetadata,
-                setTactonDemo: setNewTactonDemo,
+                // setTactonDemo: setNewTactonDemo,
                 setTacton: setTacton,
                 setTactonMetadata:setTactonMetadata
             }}>

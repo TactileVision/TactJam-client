@@ -24,10 +24,10 @@ export default function TimeProfile() {
   const classes = useStyles();
 
   //to remove               
-  const { setTactonDemo } = useContext(TactonContext);
-  useEffect(() => {
-    setTactonDemo()
-  }, [])
+  // const { setTactonDemo } = useContext(TactonContext);
+  // useEffect(() => {
+  //   setTactonDemo()
+  // }, [])
 
   //TODO implement sending tactons from the serial connection
   //taken care off in the TactonContext scope
@@ -45,7 +45,7 @@ export default function TimeProfile() {
 
   return (
     <TactonContext.Consumer>
-      {({ encodedTacton, setTactonDemo }) => (
+      {({ encodedTacton}) => (
           // <Grid item xs={10} className={classes.fullWidth}>
             <svg id="time-profile" className={classes.svg}>
               {(() => {
