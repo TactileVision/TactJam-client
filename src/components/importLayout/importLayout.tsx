@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface ImportLayoutProps {
-    returnMainLayout: () => void,
+    returnToMainLayout: () => void,
 }
 
 // const ImportLayout = ({ slotNumber }: importLayoutInterface) => {
@@ -74,7 +74,7 @@ const ImportLayout = (props: ImportLayoutProps) => {
         // console.log('iclicked')
         // console.log(tacton);
         setTacton(tacton);
-        props.returnMainLayout();
+        props.returnToMainLayout();
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -188,7 +188,7 @@ const ImportLayout = (props: ImportLayoutProps) => {
             <Grid item container xs={12} justify="center" alignContent="center" className={classes.fixedButton}>
                 <Grid item>
                     <Button variant="contained"
-                        onClick={() => props.returnMainLayout()}>
+                        onClick={() => props.returnToMainLayout()}>
                         Cancel
                     </Button>
                 </Grid>

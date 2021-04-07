@@ -5,7 +5,6 @@ import Button from '@material-ui/core/Button';
 import { withTranslation } from 'react-i18next';
 import axios from "axios";
 import CustomAlert from '../centralComponents/CustomAlert'
-import { SettingsInputAntennaTwoTone } from '@material-ui/icons';
 
 
 interface loginInterface {

@@ -43,6 +43,7 @@
     "d3": "^6.3.1",
     "file-loader": "^6.2.0",
     "i18next": "^19.8.5",
+    "notistack": "^1.0.5",
     "react-i18next": "^11.8.5",
     "react-select": "^4.0.2",
     "react-three-fiber": "^5.3.11",

@@ -3,12 +3,9 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TimeProfile from '../timeProfile/timeProfile';
 import ActuatorPlacement from "@/components/actuatorsPlacement/actuatorsPlacement";
-import ConnectionLine from "@/components/deviceConnection/connectionLine";
-import { InformContext, InformProvided } from '../centralComponents/InformContext'
 import clsx from 'clsx';
-import CustomAlert from '../centralComponents/CustomAlert'
-import {Alert} from "@material-ui/lab";
-import {Snackbar} from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
+import { Snackbar } from "@material-ui/core";
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
         // flexGrow: 1,
@@ -27,56 +24,21 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function MainLayout(props: { active: boolean, slotNb: number, tactonSaved: boolean, cancelMessage: () => void }) {
     const classes = useStyles();
 
-    const switchSaveLayoutError = (saveRequested: boolean[], informProvidList: InformProvided[]) => {
-       // console.log('switchSaveLayoutError')
-        if (saveRequested[props.slotNb - 1]) {
-            const informProvid = informProvidList[props.slotNb - 1]
-            if (informProvid.patternProvided) {
-                if (!informProvid.positionProvided) {
-                   // console.log('positionProvided false')
-                    return (<Grid item xs={12}>
-                        You have to place at least one motor.
-                    </Grid>)
-                }
-            } else {
-               // console.log('Pattern false')
-                return (<Grid item xs={12}>
-                    We don't receive a Pattern.
-                </Grid>)
-            }
-        }
-    }
-
-    
-
     return (
-        <InformContext.Consumer>
-            {({ saveRequested, informProvidList }) => (
-                // <div className={classes.root} hidden={!props.active}>
-                <div className={clsx(classes.root, !props.active ? classes.hide : '')}>
-                    <Grid container spacing={0} className={classes.root}>
-                        <Grid container item xs={6} className={classes.fullHeight}>
-                            <TimeProfile />
-                        </Grid>
-                        <Grid container item xs={6} className={classes.fullHeight}>
-                            <ActuatorPlacement />
-                        </Grid>
-                        <Snackbar open={props.tactonSaved} autoHideDuration={3000} onClose={() => props.cancelMessage()}>
-                            <Alert severity="success" onClose={() => props.cancelMessage()}>
-                                Tacton successfully uploaded!
+        // <div className={classes.root} hidden={!props.active}>
+        <div className={clsx(classes.root, !props.active ? classes.hide : '')}>
+            <Grid container spacing={0} className={classes.root}>
+                <Grid container item xs={6} className={classes.fullHeight}>
+                    <TimeProfile />
+                </Grid>
+                <Grid container item xs={6} className={classes.fullHeight}>
+                    <ActuatorPlacement />
+                </Grid>
+                <Snackbar open={props.tactonSaved} autoHideDuration={3000} onClose={() => props.cancelMessage()}>
+                    <Alert severity="success" onClose={() => props.cancelMessage()}>
+                        Tacton successfully uploaded!
                             </Alert>
-                        </Snackbar>
-                        {/*<Grid item xs={12}>*/}
-                        {/*    <CustomAlert*/}
-                        {/*        showAlert={props.tactonSaved}*/}
-                        {/*        notifyParentCancel={() => props.cancelMessage()}*/}
-                        {/*        message='save.success'*/}
-                        {/*        severity='success' />*/}
-                        {/*</Grid>*/}
-                        {switchSaveLayoutError(saveRequested, informProvidList)}
-                    </Grid>
-                    <ConnectionLine />
-                </div>)}
-        </InformContext.Consumer>
-    );
+                </Snackbar>
+            </Grid>
+        </div>)
 }

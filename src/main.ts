@@ -107,10 +107,6 @@ serialConnection.onDeviceDisconnect = () => {
   serialPort = null
 }
 
-ipcMain.on('isDeviceConnected', (event) => {
-  event.reply('deviceConnection', serialConnection.deviceConnected);
-});
-
 // start checking ports continuously
 serialConnection.checkPortsContinuously()
 

@@ -4,7 +4,7 @@ import App from '@/components/App';
 import axios from "axios";
 import { I18nextProvider } from 'react-i18next';
 import i18n from './services/i18n';
-import { InformProvider } from './components/centralComponents/InformContext';
+import { SnackbarProvider } from 'notistack';
 
 axios.defaults.baseURL = 'https://itactjam.informatik.htw-dresden.de';
 axios.defaults.timeout = 2000,
@@ -12,8 +12,13 @@ axios.defaults.timeout = 2000,
 
 ReactDOM.render(
     <I18nextProvider i18n={i18n}>
-        <InformProvider>
+        <SnackbarProvider
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+            }}
+        >
             <App />
-        </InformProvider>
+        </SnackbarProvider>
     </I18nextProvider>
     , document.getElementById('root'));
