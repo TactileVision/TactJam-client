@@ -89,6 +89,7 @@ serialConnection.onDeviceConnect = (port: any) => {
 
   if(msg.type === 1) { // TactJam device is sending a tacton
     console.log("setting tacton on slot #"+msg.slot);
+    console.log(msg.content);
     mainWindow?.webContents.send('setTacton', { slot: msg.slot, byteArray: msg.content });
   }
   if(msg.type === 2) { // TactJam device is asking for a tacton
@@ -97,9 +98,9 @@ serialConnection.onDeviceConnect = (port: any) => {
   }
   })
 
-  // const parser2 = new ReadLine();
-  // serialPort.pipe(parser2);
-  // parser2.on('data', console.log);
+  const parser2 = new ReadLine();
+  serialPort.pipe(parser2);
+  parser2.on('data', console.log);
 }
 
 serialConnection.onDeviceDisconnect = () => {

@@ -56,6 +56,7 @@ export default function ConnectionLine(props: { switchLayout: (slot: number) => 
 
 
     // update view on device (dis)connection
+    ipcRenderer.removeAllListeners('deviceConnection');
     ipcRenderer.on('deviceConnection', (event, newConnection) => {
         if (newConnection !== connected) {
             if (newConnection == true) {
@@ -78,6 +79,7 @@ export default function ConnectionLine(props: { switchLayout: (slot: number) => 
     });
 
     // retrieve tacton's data when device asks
+    ipcRenderer.removeAllListeners('getTacton');
     ipcRenderer.on('getTacton', (event, slot: number) => {
         // update tacton information if this slot is the one targeted
         if (slot === slotNb) {
@@ -92,6 +94,7 @@ export default function ConnectionLine(props: { switchLayout: (slot: number) => 
     })
 
     // update tacton's data when device sends one
+    ipcRenderer.removeAllListeners('setTacton');
     ipcRenderer.on('setTacton', (event, args: { slot: number, byteArray: ArrayBuffer }) => {
         // update tacton information if this slot is the one targeted
         if (args.byteArray !== null) {
@@ -108,6 +111,7 @@ export default function ConnectionLine(props: { switchLayout: (slot: number) => 
             }
         }
     })
+
 
     return (
         <div className={clsx(classes.connectionLine, connected ? classes.connected : classes.disconnected)} />

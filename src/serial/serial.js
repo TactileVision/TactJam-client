@@ -77,7 +77,7 @@ function SerialConnection() {
                     }
                     if(msg.byteLength) msg.content = fullMsg.getString(6, msg.byteLength)
 
-                    // console.log("Device msg: " + msg.type + " " + msg.slot + " " + msg.byteLength + " " + msg.content);
+                    console.log("Device msg: " + msg.type + " " + msg.slot + " " + msg.byteLength + " " + msg.content);
                     if(msg.type === 3 && msg.content === "asking" && !connection.deviceConnected) {
                         tactjamPort = serialPort;
                         connection.onDeviceConnect(tactjamPort);
@@ -89,6 +89,7 @@ function SerialConnection() {
                         buf.writeUInt32LE(7, 2);
                         buf.write("granted", 6, "utf-8");
                         tactjamPort.write(buf);
+                        tactjamPort.write("\r\n");
                     }
                 }
             });
