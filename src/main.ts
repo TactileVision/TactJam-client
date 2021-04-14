@@ -115,15 +115,18 @@ serialConnection.checkPortsContinuously()
 // sending tacton information to device
 ipcMain.on('sendTactonToDevice', (event, args: { slot: number, byteArray: ArrayBuffer }) => {
   console.log("sending tacton to device on slot #"+args.slot);
-  console.log(args.byteArray);
+  // console.log(args.byteArray);
   const size = 6 + (args.byteArray ? args.byteArray.byteLength : 0);
-  const buf1 = Buffer.alloc(size);
+  const buf1 = Buffer.alloc(6);
   buf1.writeInt8(2, 0); // receive msg type
   buf1.writeInt8(args.slot, 1); // no slot related
   buf1.writeUInt32LE(args.byteArray ? args.byteArray.byteLength : 0, 2); // no slot attached
   if(args.byteArray !== null) {
-    const buf2 = Buffer.from(args.byteArray, args.byteArray.byteLength);
-    serialPort?.write(Buffer.concat([buf1, buf2]), buf1.length + buf2.length);
+    const buf2 = Buffer.from(args.byteArray);
+    // console.log(buf2.slice(0));
+    const concBuf = Buffer.concat([buf1, buf2]);
+    serialPort?.write(concBuf);
+    console.log(concBuf.slice(0));
   } else {
     serialPort?.write(buf1);
   }
