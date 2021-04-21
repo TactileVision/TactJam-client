@@ -111,7 +111,7 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
                 if (instruction.type == 'SetAmplitude') {
                     // if (instruction.channelSelect !== 0) {
                     // console.log("Channel " + instruction.channelSelect);
-                    actuators[7 - instruction.channelSelect].push({ amplitude: instruction.amplitude, time: currentTime });
+                    actuators[instruction.channelSelect].push({ amplitude: instruction.amplitude, time: currentTime });
                     // }
                     // channel = 0 means all actuators must change
                     // else {
