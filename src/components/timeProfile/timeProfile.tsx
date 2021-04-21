@@ -59,7 +59,7 @@ export default function TimeProfile() {
                   return <ActuatorTimeProfile key={'timeProfile-' + id} id={id + 1}
                     x={100} y={startY + stepY * id} width={400} height={60} color={col}
                     duration={encodedTacton ? encodedTacton.duration : 0}
-                    data={encodedTacton ? encodedTacton.actuators[id + 1] : null} />
+                    data={encodedTacton ? encodedTacton.actuators[id] : null} />
                 });
                 return res;
               })()}

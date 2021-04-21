@@ -35,6 +35,8 @@ class ActuatorTimeProfile extends React.Component<PlotCharacteristics> {
     // update the plot based on the input stream
     updateData() {
         const data = this.props.data;
+        this.line = '';
+        this.area = '';
         if(data === null || data.length === 0) return;
 
         // console.log(this.props.id, data);

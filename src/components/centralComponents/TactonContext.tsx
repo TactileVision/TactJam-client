@@ -101,7 +101,7 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
 
     const encodeTacton = (instructionWords: ArrayBufferLike): tactonAttributes => {
         const actuators: tactonAttributes["actuators"] = {};
-        for (let i = 1; i <= 8; i++) { actuators[i] = []; }
+        for (let i = 0; i < 8; i++) { actuators[i] = []; }
         let currentTime = 0;
 
         // VTP.readInstructionWords(tactons[0]).map((el: object, i: number) => VTP.decodeInstruction(el))
@@ -109,16 +109,18 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
             .map((instruction: VTPInstruction) => {
                 currentTime += instruction.timeOffset;
                 if (instruction.type == 'SetAmplitude') {
-                    if (instruction.channelSelect !== 0) {
-                        actuators[instruction.channelSelect + 1].push({ amplitude: instruction.amplitude, time: currentTime });
-                    }
+                    // if (instruction.channelSelect !== 0) {
+                    // console.log("Channel " + instruction.channelSelect);
+                    actuators[7 - instruction.channelSelect].push({ amplitude: instruction.amplitude, time: currentTime });
+                    // }
                     // channel = 0 means all actuators must change
-                    else {
-                        Object.keys(actuators).forEach((key, i) => actuators[+key].push({ amplitude: instruction.amplitude, time: currentTime }));
-                    }
+                    // else {
+                    //     Object.keys(actuators).forEach((key, i) => actuators[+key].push({ amplitude: instruction.amplitude, time: currentTime }));
+                    // }
                 }
             });
 
+        // console.log(actuators);
         return { duration: currentTime, actuators };
     }
 
@@ -134,7 +136,6 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
         const hashEncoding = "hex"
         const buffer = Buffer.from(tacton.libvtp, hashEncoding);
         const encodedTacton: tactonAttributes = encodeTacton(buffer)
-        console.log(encodedTacton);
 
         //get the correct motorpositions
         let positions: THREE.Vector3[] = [];

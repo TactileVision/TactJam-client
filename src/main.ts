@@ -85,7 +85,8 @@ serialConnection.onDeviceConnect = (port: any) => {
   }
   if(msg.byteLength) msg.content = fullMsg.buffer.slice(6);
 
-  console.log("Device msg: " + msg.type + " " + msg.slot + " " + msg.byteLength + " " + msg.content?.byteLength);
+  if(msg.type === 1 || msg.type === 2)
+    console.log("Device msg: " + msg.type + " " + msg.slot + " " + msg.byteLength + " " + msg.content?.byteLength);
 
   if(msg.type === 1) { // TactJam device is sending a tacton
     console.log("setting tacton on slot #"+msg.slot);
