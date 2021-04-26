@@ -110,6 +110,7 @@ function SerialConnection() {
             if(tactjamPort) connection.onDeviceDisconnect();
             tactjamPort = null;
             connection.deviceConnected = false;
+            console.log("Device disconnected");
         } else if(tactjamPort === null) {
             // if no device is connected, listen to all ports
             let serialPorts = ports.map((port, i) => openPortAndListen(port));

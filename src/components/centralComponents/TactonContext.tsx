@@ -133,9 +133,13 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
     const setTacton = (tacton: Tacton) => {
         console.log("maybe crash if encode Tacton works correct")
         //encode the tactonPattern from the server
-        const hashEncoding = "hex"
-        const buffer = Buffer.from(tacton.libvtp, hashEncoding);
-        const encodedTacton: tactonAttributes = encodeTacton(buffer)
+        console.log("Buffer from server: " + tacton.libvtp)
+        let buffer: Buffer = null, encodedTacton: tactonAttributes = null;
+        if(tacton.libvtp !== null) {
+            const hashEncoding = "hex"
+            buffer = Buffer.from(tacton.libvtp, hashEncoding)
+            encodedTacton = encodeTacton(buffer)
+        }
 
         //get the correct motorpositions
         let positions: THREE.Vector3[] = [];

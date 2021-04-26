@@ -104,6 +104,11 @@ serialConnection.onDeviceConnect = (port: any) => {
   parser2.on('data', console.log);
 }
 
+// render can ask for update about the connection, in which case we send the current state
+ipcMain.on("checkConnection", () => {
+  mainWindow?.webContents.send('deviceConnection', serialPort !== null);
+})
+
 serialConnection.onDeviceDisconnect = () => {
   mainWindow?.webContents.send('deviceConnection', false)
   serialPort = null

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import clsx from "clsx";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { ipcRenderer } from 'electron';
@@ -55,31 +55,57 @@ export default function ConnectionLine(props: { switchLayout: (slot: number) => 
     );
 
 
-    // update view on device (dis)connection
-    ipcRenderer.removeAllListeners('deviceConnection');
-    ipcRenderer.on('deviceConnection', (event, newConnection) => {
-        if (newConnection !== connected) {
-            if (newConnection == true) {
-                enqueueSnackbar("Device connected!", {
-                    variant: 'success',
-                    autoHideDuration: 3000,
-                    preventDuplicate: true,
-                    action: actionOnlyClose,
-                });
-            } else {
-                enqueueSnackbar("Device disconnected!", {
-                    variant: 'error',
-                    autoHideDuration: 3000,
-                    action: actionOnlyClose,
-                    preventDuplicate: true,
-                });
+    useEffect(() => {
+        // update view on device (dis)connection
+        // ipcRenderer.removeAllListeners('deviceConnection');
+        ipcRenderer.on('deviceConnection', (event, newConnection) => {
+            if (newConnection !== connected) {
+                if (newConnection == true) {
+                    enqueueSnackbar("Device connected!", {
+                        variant: 'success',
+                        autoHideDuration: 3000,
+                        preventDuplicate: true,
+                        action: actionOnlyClose,
+                    });
+                } else {
+                    enqueueSnackbar("Device disconnected!", {
+                        variant: 'error',
+                        autoHideDuration: 3000,
+                        action: actionOnlyClose,
+                        preventDuplicate: true,
+                    });
+                }
+                setConnected(newConnection);
             }
-            setConnected(newConnection);
-        }
-    });
+        });
 
-    // retrieve tacton's data when device asks
-    ipcRenderer.removeAllListeners('getTacton');
+        // retrieve tacton's data when device asks
+        // ipcRenderer.removeAllListeners('getTacton');
+
+
+        // update tacton's data when device sends one
+        // ipcRenderer.removeAllListeners('setTacton');
+        ipcRenderer.on('setTacton', (event, args: { slot: number, byteArray: ArrayBuffer }) => {
+            // update tacton information if this slot is the one targeted
+            if (args.byteArray !== null) {
+                console.log("setting tacton on slot #" + args.slot, args.byteArray);
+                console.log('slot number = ' + slotNb);
+                if (args.slot === slotNb) {
+                    console.log("setting tacton on slot #" + args.slot, args.byteArray);
+                    setPattern(args.byteArray)
+                } else {
+                    enqueueSnackbar("You recieved a Tacton. Do you want so switch the slot?", {
+                        variant: 'success',
+                        autoHideDuration: 5000,
+                        action: (key) => actionRecievedTacton(key, args.slot),
+                        preventDuplicate: true,
+                    })
+                }
+            }
+        })
+    }, []);
+
+    // does not work when placed in the "useEffect", not sure why...
     ipcRenderer.on('getTacton', (event, slot: number) => {
         // update tacton information if this slot is the one targeted
         if (slot === slotNb) {
@@ -92,26 +118,6 @@ export default function ConnectionLine(props: { switchLayout: (slot: number) => 
             }
         }
     })
-
-    // update tacton's data when device sends one
-    ipcRenderer.removeAllListeners('setTacton');
-    ipcRenderer.on('setTacton', (event, args: { slot: number, byteArray: ArrayBuffer }) => {
-        // update tacton information if this slot is the one targeted
-        if (args.byteArray !== null) {
-            if (args.slot === slotNb) {
-                console.log("setting tacton on slot #" + args.slot, args.byteArray);
-                setPattern(args.byteArray)
-            } else {
-                enqueueSnackbar("You recieved a Tacton. Do you want so switch the slot?", {
-                    variant: 'success',
-                    autoHideDuration: 5000,
-                    action: (key) => actionRecievedTacton(key, args.slot),
-                    preventDuplicate: true,
-                })
-            }
-        }
-    })
-
 
     return (
         <div className={clsx(classes.connectionLine, connected ? classes.connected : classes.disconnected)} />
