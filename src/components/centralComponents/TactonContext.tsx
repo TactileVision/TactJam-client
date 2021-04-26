@@ -131,11 +131,11 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
         })
     }
     const setTacton = (tacton: Tacton) => {
-        console.log("maybe crash if encode Tacton works correct")
-        //encode the tactonPattern from the server
+        // console.log("maybe crash if encode Tacton works correct")
+        // encode the tactonPattern from the server
         console.log("Buffer from server: " + tacton.libvtp)
         let buffer: Buffer = null, encodedTacton: tactonAttributes = null;
-        if(tacton.libvtp !== null) {
+        if(tacton.libvtp !== null && tacton.libvtp !== "") {
             const hashEncoding = "hex"
             buffer = Buffer.from(tacton.libvtp, hashEncoding)
             encodedTacton = encodeTacton(buffer)

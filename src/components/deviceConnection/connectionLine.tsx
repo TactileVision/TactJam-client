@@ -94,7 +94,7 @@ export default function ConnectionLine(props: { switchLayout: (slot: number) => 
                     console.log("setting tacton on slot #" + args.slot, args.byteArray);
                     setPattern(args.byteArray)
                 } else {
-                    enqueueSnackbar("You recieved a Tacton. Do you want so switch the slot?", {
+                    enqueueSnackbar("You received a Tacton on another slot. Do you want to switch slots?", {
                         variant: 'success',
                         autoHideDuration: 5000,
                         action: (key) => actionRecievedTacton(key, args.slot),
