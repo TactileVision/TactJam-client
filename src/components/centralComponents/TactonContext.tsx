@@ -138,7 +138,7 @@ const TactonProvider = (props: { slotNb: number, children: ReactNode }) => {
         if(tacton.libvtp !== null && tacton.libvtp !== "") {
             const hashEncoding = "hex"
             buffer = Buffer.from(tacton.libvtp, hashEncoding)
-            encodedTacton = encodeTacton(buffer)
+            encodedTacton = encodeTacton(buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength))
         }
 
         //get the correct motorpositions
