@@ -6,6 +6,7 @@ import RegisterLayout from './login/registerLayout';
 import LoginLayout from './login/loginLayout';
 import TactonLayout from './tactonLayout/tactonLayout';
 import { useSnackbar } from 'notistack';
+import ConnectionLine from './deviceConnection/connectionLine';
 
 export enum Layouts {
   MainLayout,
@@ -63,6 +64,7 @@ export default function NavTabs() {
       <TactonLayout slotNb={1} layout={currentLayout} active={activeSlot === 1} switchLayout={(slot:number, layout: Layouts) => handleChange(slot, layout)} />
       <TactonLayout slotNb={2} layout={currentLayout} active={activeSlot === 2} switchLayout={(slot:number, layout: Layouts) => handleChange(slot, layout)} />
       <TactonLayout slotNb={3} layout={currentLayout} active={activeSlot === 3} switchLayout={(slot:number, layout: Layouts) => handleChange(slot, layout)} />
+      <ConnectionLine currentSlot={activeSlot}  switchLayout={(newSlot:number) => handleChange(newSlot, Layouts.MainLayout)}/>
     </Grid>
   ) : (
     <div className={classes.root}>
