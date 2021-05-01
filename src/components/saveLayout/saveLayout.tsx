@@ -41,7 +41,7 @@ enum TagKind {
 
 interface SaveLayoutProps {
     t: any
-    returnToMainLayout: (tactonSaved:boolean) => void
+    returnToMainLayout: (tactonSaved: boolean) => void
 }
 
 interface Selector {
@@ -128,9 +128,9 @@ const SaveLayout = (props: SaveLayoutProps) => {
             setTactonMetadata(response.data)
             props.returnToMainLayout(true)
         }).catch((error) => {
-                console.log("something go wrong");
-                console.log(error)
-                console.log(error.data)
+            console.log("something go wrong");
+            console.log(error)
+            console.log(error.data)
         });
     }
 
@@ -189,15 +189,18 @@ const SaveLayout = (props: SaveLayoutProps) => {
                     input = input.substring(nextBreak + 1, input.length);
                 }
             }
-        // } while (nextSpace >= 0 || nextHash >= 0 || nextSemicolon >= 0 || nextComa >= 0 || nextAt >= 0)
+            // } while (nextSpace >= 0 || nextHash >= 0 || nextSemicolon >= 0 || nextComa >= 0 || nextAt >= 0)
         } while (nextHash >= 0 || nextSemicolon >= 0 || nextComa >= 0 || nextAt >= 0)
         return tagArray;
     }
     //set the values in the select box
     const changeTag = (inputValue: any, actionMeta: any, kindOfTag: TagKind) => {
         //new item selected
+        console.log(actionMeta.action);
+        console.log(inputValue)
         if (actionMeta.action == 'create-option') {
-            const lastItem: Selector = inputValue[inputValue.length - 1];
+            var lastItem: Selector = inputValue[inputValue.length - 1];
+            lastItem = { value: lastItem.value.toLowerCase(), label: lastItem.label.toLowerCase() };
             //check if string is valid
             if (checkGoodString(lastItem.label)) {
                 const newTags = createNewTags(lastItem.label);
