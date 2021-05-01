@@ -1,6 +1,6 @@
 {
   "name": "tactjam",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "TactJam GUI that enables communicating with a TactJam device as well as saving and loading tacton data from a server.",
   "homepage": "https://github.com/TactileVision/TactJam-client/",
   "main": "build/main.js",

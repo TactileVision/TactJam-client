@@ -6,7 +6,6 @@ import ImportLayout from "@/components/importLayout/importLayout";
 import SaveLayout from "@/components/saveLayout/saveLayout";
 import { Layouts } from "../App";
 import { TactonProvider } from '../centralComponents/TactonContext';
-import ConnectionLine from "@/components/deviceConnection/connectionLine";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -41,10 +40,9 @@ export default function TactonLayout(props: TactonLayoutProps) {
     return (
         <TactonProvider slotNb={props.slotNb}>
             <Grid item xs={12} hidden={!props.active}>
-                <MainLayout active={props.layout === Layouts.MainLayout} slotNb={props.slotNb} tactonSaved={tactonIsSaved} cancelMessage={() =>  cancelMessage()}/>
+                <MainLayout active={props.layout === Layouts.MainLayout} tactonSaved={tactonIsSaved} cancelMessage={() =>  cancelMessage()}/>
                 {props.layout === Layouts.ImportLayout && <ImportLayout returnToMainLayout={() => props.switchLayout(props.slotNb, Layouts.MainLayout)} />}
                 {props.layout === Layouts.SaveLayout && <SaveLayout returnToMainLayout={(tactonSaved) => saveTacton(tactonSaved)} />}
-                <ConnectionLine switchLayout={(newSlot:number) => props.switchLayout(newSlot, Layouts.MainLayout)}/>
             </Grid>
         </TactonProvider>
     );
