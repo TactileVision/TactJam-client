@@ -57,7 +57,8 @@
     "copyright": "Copyright © 2021 Tactile Vision (MIT License)",
     "files": [
       "build/*",
-      "build/webpack-assets/*"
+      "build/webpack-assets/*",
+      "build/icons/icon.*"
     ],
     "mac": {
       "category": "public.app-category.graphics-design",
@@ -65,7 +66,7 @@
         "dmg",
         "pkg"
       ],
-      "icon": "build/icon.png"
+      "icon": "build/icons/icon.png"
     },
     "dmg": {
       "title": "TactJam"
